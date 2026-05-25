@@ -536,7 +536,7 @@ img[data-loading="true"] {
 
 /* Light mode hero */
 .light .hero-gradient {
-  background: linear-gradient(135deg, #FFFFFF 0%, #FAFAFA 50%, #FFFFFF 100%) !important;
+  background: linear-gradient(135deg, #FFFFFF 0%, #FAFAFA 50%, #FFFDF7 100%) !important;
 }
 
 .light .hero-bottom-gradient {

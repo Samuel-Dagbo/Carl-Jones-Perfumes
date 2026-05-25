@@ -22,27 +22,8 @@ export function HeroSection() {
       ref={sectionRef}
       className="relative min-h-[100dvh] sm:min-h-[90dvh] lg:min-h-[90dvh] flex items-center overflow-hidden hero-gradient"
     >
-      {/* Mobile Background Image - full bleed with cinematic treatment */}
-      <div className="absolute inset-0 lg:hidden">
-        <motion.div
-          initial={{ scale: 1.15 }}
-          animate={{ scale: 1 }}
-          transition={{ duration: 8, ease: [0.16, 1, 0.3, 1] }}
-          className="absolute inset-0"
-        >
-          <Image
-            src="https://images.unsplash.com/photo-1622618991746-fe6004db3a47?w=800&auto=format&fit=crop&q=80"
-            alt="CARL JONES Signature Perfume"
-            fill
-            className="object-cover object-center"
-            priority
-          />
-        </motion.div>
-        <div className="absolute inset-0 bg-gradient-to-b from-black/5 via-black/35 to-black/15" />
-        <div className="absolute inset-0 noise-overlay" />
-      </div>
-
-      {/* Ambient glow - enhanced on mobile */}
+      {/* Mobile gold accent glow */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-br from-kartel-gold/8 via-kartel-gold/3 to-transparent rounded-full blur-[120px] pointer-events-none lg:hidden" />
       <div className="absolute top-[-10%] right-[-10%] w-[600px] h-[600px] bg-gradient-to-br from-kartel-gold/10 via-kartel-gold/3 to-transparent rounded-full blur-[150px] pointer-events-none" />
       <div className="absolute bottom-0 left-[-20%] w-[500px] h-[500px] bg-gradient-to-tr from-kartel-gold/6 via-kartel-gold/2 to-transparent rounded-full blur-[120px] pointer-events-none" />
 
@@ -77,15 +58,14 @@ export function HeroSection() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
               className="space-y-2"
-              style={{ textShadow: '0 2px 16px rgba(0,0,0,0.6)' }}
             >
-              <h1 className="font-serif text-[clamp(2.25rem,7vw,3.5rem)] font-bold text-white lg:text-heading leading-[1.05] tracking-[-0.02em] text-balance">
+              <h1 className="font-serif text-[clamp(2.25rem,7vw,3.5rem)] font-bold text-heading leading-[1.05] tracking-[-0.02em] text-balance">
                 Define Your{' '}
                 <span className="italic font-light bg-gradient-to-r from-kartel-gold via-kartel-gold-light to-kartel-gold-dark bg-clip-text text-transparent">
                   Invisible
                 </span>
               </h1>
-              <h1 className="font-serif text-[clamp(1.75rem,5vw,3rem)] font-bold text-white/95 lg:text-heading/85 leading-[1.1] tracking-[-0.02em]">
+              <h1 className="font-serif text-[clamp(1.75rem,5vw,3rem)] font-bold text-heading leading-[1.1] tracking-[-0.02em]">
                 Signature
               </h1>
             </motion.div>
@@ -95,8 +75,7 @@ export function HeroSection() {
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-              className="text-[clamp(0.9375rem,2.5vw,1.125rem)] text-white/90 lg:text-body max-w-xl leading-[1.8]"
-              style={{ textShadow: '0 1px 12px rgba(0,0,0,0.6)' }}
+              className="text-[clamp(0.9375rem,2.5vw,1.125rem)] text-body max-w-xl leading-[1.8]"
             >
               CARL JONES blends rare botanicals with avant-garde chemistry. Each scent
               transcends time—a symphony of luxury for the discerning few.
@@ -122,7 +101,7 @@ export function HeroSection() {
               </Link>
               <Link
                 href="/about"
-                className="inline-flex items-center justify-center text-sm px-8 py-4 border border-white/50 lg:border-black/[0.2] text-white lg:text-black/70 rounded-full bg-black/20 lg:bg-transparent backdrop-blur-md hover:bg-white/15 lg:hover:bg-black/[0.05] hover:border-white/60 lg:hover:border-black/20 transition-all duration-300"
+                className="inline-flex items-center justify-center text-sm px-8 py-4 border border-black/20 text-black/70 rounded-full bg-transparent hover:bg-black/[0.05] hover:border-black/30 transition-all duration-300"
               >
                 Our Heritage
               </Link>
@@ -134,9 +113,8 @@ export function HeroSection() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.55, ease: [0.16, 1, 0.3, 1] }}
               className="flex items-center gap-4 pt-4"
-              style={{ textShadow: '0 1px 8px rgba(0,0,0,0.5)' }}
             >
-              <div className="h-px flex-1 bg-gradient-to-r from-transparent via-white/20 lg:via-black/[0.08] to-transparent" />
+              <div className="h-px flex-1 bg-gradient-to-r from-transparent via-black/[0.08] to-transparent" />
               <div className="flex gap-6 lg:gap-12">
                 {[
                   { value: '200+', label: 'Scents' },
@@ -144,12 +122,12 @@ export function HeroSection() {
                   { value: '4.9', label: 'Rating' },
                 ].map((stat) => (
                   <div key={stat.label} className="text-center">
-                    <p className="text-lg lg:text-xl font-serif font-bold text-white lg:text-heading">{stat.value}</p>
-                    <p className="text-[9px] uppercase tracking-[0.2em] text-white/70 lg:text-muted mt-1">{stat.label}</p>
+                    <p className="text-lg lg:text-xl font-serif font-bold text-heading">{stat.value}</p>
+                    <p className="text-[9px] uppercase tracking-[0.2em] text-muted mt-1">{stat.label}</p>
                   </div>
                 ))}
               </div>
-              <div className="h-px flex-1 bg-gradient-to-r from-white/20 lg:from-black/[0.08] to-transparent" />
+              <div className="h-px flex-1 bg-gradient-to-r from-black/[0.08] to-transparent" />
             </motion.div>
           </motion.div>
 
@@ -190,8 +168,8 @@ export function HeroSection() {
         </div>
       </div>
 
-      {/* Bottom gradient - more prominent on mobile */}
-      <div className="absolute bottom-0 left-0 right-0 h-32 lg:h-24 bg-gradient-to-t from-black/60 via-black/20 to-transparent lg:from-transparent lg:via-transparent lg:to-transparent pointer-events-none" />
+      {/* Bottom gradient - subtle fade on mobile */}
+      <div className="absolute bottom-0 left-0 right-0 h-32 lg:h-24 bg-gradient-to-t from-white/60 via-white/20 to-transparent lg:from-transparent lg:via-transparent lg:to-transparent pointer-events-none" />
 
       {/* Decorative corner dots */}
       <div className="absolute bottom-8 left-8 w-2 h-2 rounded-full bg-kartel-gold/20 hidden sm:block" />
@@ -204,7 +182,7 @@ export function HeroSection() {
         transition={{ delay: 2, duration: 1 }}
         className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3"
       >
-        <span className="text-[9px] uppercase tracking-[0.3em] text-white/50 lg:text-muted">Scroll</span>
+        <span className="text-[9px] uppercase tracking-[0.3em] text-muted">Scroll</span>
         <motion.div
           animate={{ y: [0, 6, 0] }}
           transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
