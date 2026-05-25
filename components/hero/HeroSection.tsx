@@ -38,7 +38,7 @@ export function HeroSection() {
             priority
           />
         </motion.div>
-        <div className="absolute inset-0 bg-black/20" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/5 via-black/35 to-black/15" />
         <div className="absolute inset-0 noise-overlay" />
       </div>
 
@@ -77,6 +77,7 @@ export function HeroSection() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
               className="space-y-2"
+              style={{ textShadow: '0 2px 16px rgba(0,0,0,0.6)' }}
             >
               <h1 className="font-serif text-[clamp(2.25rem,7vw,3.5rem)] font-bold text-white lg:text-heading leading-[1.05] tracking-[-0.02em] text-balance">
                 Define Your{' '}
@@ -95,6 +96,7 @@ export function HeroSection() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
               className="text-[clamp(0.9375rem,2.5vw,1.125rem)] text-white/90 lg:text-body max-w-xl leading-[1.8]"
+              style={{ textShadow: '0 1px 12px rgba(0,0,0,0.6)' }}
             >
               CARL JONES blends rare botanicals with avant-garde chemistry. Each scent
               transcends time—a symphony of luxury for the discerning few.
@@ -132,6 +134,7 @@ export function HeroSection() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.55, ease: [0.16, 1, 0.3, 1] }}
               className="flex items-center gap-4 pt-4"
+              style={{ textShadow: '0 1px 8px rgba(0,0,0,0.5)' }}
             >
               <div className="h-px flex-1 bg-gradient-to-r from-transparent via-white/20 lg:via-black/[0.08] to-transparent" />
               <div className="flex gap-6 lg:gap-12">
