@@ -6,6 +6,28 @@ import { authOptions } from '@/lib/auth'
 
 export const dynamic = 'force-dynamic'
 
+function generateSlug(name: string): string {
+  return name
+    .toLowerCase()
+    .replace(/[^\w\s-]/g, '')
+    .replace(/[\s_]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .slice(0, 80)
+}
+
+async function getUniqueSlug(baseSlug: string): Promise<string> {
+  const existing = await Product.findOne({ slug: baseSlug }).select('_id')
+  if (!existing) return baseSlug
+
+  let counter = 1
+  while (true) {
+    const slug = `${baseSlug}-${counter}`
+    const found = await Product.findOne({ slug }).select('_id')
+    if (!found) return slug
+    counter++
+  }
+}
+
 export async function GET(req: NextRequest) {
   try {
     await connectDB()
@@ -37,14 +59,22 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
     }
 
+    const baseSlug = generateSlug(body.name)
+    const slug = await getUniqueSlug(baseSlug)
+
     const product = await Product.create({
       ...body,
-      slug: body.name.toLowerCase().replace(/ /g, '-'),
+      slug,
+      rating: body.rating ?? 0,
+      reviewCount: body.reviewCount ?? 0,
     })
 
     return NextResponse.json(product, { status: 201 })
   } catch (error: any) {
-    return NextResponse.json({ error: 'Failed to create product' }, { status: 500 })
+    const message = error.code === 11000
+      ? 'A product with this name already exists'
+      : error.message || 'Failed to create product'
+    return NextResponse.json({ error: message }, { status: 500 })
   }
 }
 
@@ -65,9 +95,22 @@ export async function PUT(req: NextRequest) {
     }
 
     const body = await req.json()
+
+    const updateData: Record<string, any> = { ...body }
+    if (body.name) {
+      const baseSlug = generateSlug(body.name)
+      const existing = await Product.findById(productId).select('slug')
+      if (existing && existing.slug !== baseSlug) {
+        updateData.slug = await getUniqueSlug(baseSlug)
+      }
+    }
+
+    delete updateData._id
+    delete updateData.__v
+
     const product = await Product.findByIdAndUpdate(
       productId,
-      body,
+      updateData,
       { new: true, runValidators: true }
     )
 

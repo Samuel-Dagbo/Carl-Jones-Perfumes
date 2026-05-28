@@ -1,14 +1,24 @@
 'use client'
 
-import React, { useState, useEffect, Suspense } from 'react'
+import React, { useState, useEffect, useRef, Suspense } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Plus, Edit, Trash2, Search, Package, X, Eye, Tag, Upload, Link as LinkIcon } from 'lucide-react'
+import { Plus, Edit, Trash2, Search, Package, X, Eye, Tag, Upload, Link as LinkIcon, Sparkles, Percent } from 'lucide-react'
 import { formatPrice } from '@/lib/utils'
 import { Product as ProductType } from '@/types'
 import Image from 'next/image'
 import { useSession } from 'next-auth/react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { toast } from '@/components/ui/use-toast'
+
+const NOTE_CATEGORIES = ['top', 'middle', 'base'] as const
+const NOTE_OPTIONS = [
+  'Bergamot', 'Lemon', 'Orange', 'Lime', 'Grapefruit', 'Pear', 'Apple', 'Mint',
+  'Sea Salt', 'Saffron', 'Cardamom', 'Black Pepper', 'Rose', 'Jasmine', 'Lily',
+  'Lavender', 'Geranium', 'Iris', 'Lotus', 'Peony', 'Orange Blossom', 'Tuberose',
+  'Cinnamon', 'Tobacco', 'Leather', 'Green Tea', 'Vanilla', 'Sandalwood', 'Musk',
+  'Patchouli', 'Oud', 'Amber', 'Cedar', 'Vetiver', 'Tonka Bean', 'Incense',
+  'Dark Chocolate', 'White Musk', 'Cashmere', 'Guaiac Wood'
+]
 
 function ProductsContent() {
   const { data: session, status } = useSession()
@@ -24,17 +34,24 @@ function ProductsContent() {
     name: '',
     description: '',
     price: '',
+    comparePrice: '',
     category: 'unisex',
     brand: '',
     size: '100ml',
     concentration: 'EDP',
     quantity: '',
     images: [''],
-    notes: { top: [''], middle: [''], base: [''] }
+    featured: false,
+    new: false,
+    tags: '',
+    notes: { top: [] as string[], middle: [] as string[], base: [] as string[] }
   })
   const [imageMode, setImageMode] = useState<'url' | 'upload'>('url')
   const [uploading, setUploading] = useState(false)
   const [saving, setSaving] = useState(false)
+  const [tagInput, setTagInput] = useState('')
+  const [noteInput, setNoteInput] = useState<Record<string, string>>({ top: '', middle: '', base: '' })
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
     if (searchParams.get('action') === 'add') {
@@ -74,9 +91,15 @@ function ProductsContent() {
     setSaving(true)
 
     try {
+      const tagsArray = formData.tags
+        ? formData.tags.split(',').map(t => t.trim()).filter(Boolean)
+        : []
+
       const payload = {
         ...formData,
+        tags: tagsArray,
         price: parseFloat(formData.price),
+        comparePrice: formData.comparePrice ? parseFloat(formData.comparePrice) : undefined,
         quantity: parseInt(formData.quantity),
         inStock: parseInt(formData.quantity) > 0
       }
@@ -134,14 +157,20 @@ function ProductsContent() {
       name: product.name,
       description: product.description,
       price: product.price.toString(),
+      comparePrice: product.comparePrice?.toString() || '',
       category: product.category,
       brand: product.brand,
       size: product.size,
       concentration: product.concentration,
       quantity: product.quantity.toString(),
-      images: product.images,
+      images: product.images.length > 0 ? product.images : [''],
+      featured: product.featured || false,
+      new: product.new || false,
+      tags: Array.isArray(product.tags) ? product.tags.join(', ') : '',
       notes: product.notes || { top: [], middle: [], base: [] }
     })
+    setNoteInput({ top: '', middle: '', base: '' })
+    setTagInput('')
     setIsModalOpen(true)
   }
 
@@ -150,14 +179,56 @@ function ProductsContent() {
       name: '',
       description: '',
       price: '',
+      comparePrice: '',
       category: 'unisex',
       brand: '',
       size: '100ml',
       concentration: 'EDP',
       quantity: '',
       images: [''],
-      notes: { top: [''], middle: [''], base: [''] }
+      featured: false,
+      new: false,
+      tags: '',
+      notes: { top: [], middle: [], base: [] }
     })
+    setNoteInput({ top: '', middle: '', base: '' })
+    setTagInput('')
+  }
+
+  const addNote = (category: 'top' | 'middle' | 'base', note: string) => {
+    if (!note.trim()) return
+    if (formData.notes[category].includes(note.trim())) return
+    setFormData({
+      ...formData,
+      notes: {
+        ...formData.notes,
+        [category]: [...formData.notes[category], note.trim()]
+      }
+    })
+    setNoteInput({ ...noteInput, [category]: '' })
+  }
+
+  const removeNote = (category: 'top' | 'middle' | 'base', index: number) => {
+    setFormData({
+      ...formData,
+      notes: {
+        ...formData.notes,
+        [category]: formData.notes[category].filter((_, i) => i !== index)
+      }
+    })
+  }
+
+  const addTag = () => {
+    if (!tagInput.trim()) return
+    const existing = formData.tags ? formData.tags.split(',').map(t => t.trim()).filter(Boolean) : []
+    if (existing.includes(tagInput.trim())) return
+    setFormData({ ...formData, tags: [...existing, tagInput.trim()].join(', ') })
+    setTagInput('')
+  }
+
+  const removeTag = (index: number) => {
+    const existing = formData.tags ? formData.tags.split(',').map(t => t.trim()).filter(Boolean) : []
+    setFormData({ ...formData, tags: existing.filter((_, i) => i !== index).join(', ') })
   }
 
   const filteredProducts = products.filter(p => {
@@ -431,7 +502,7 @@ function ProductsContent() {
 
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                   <div className="space-y-2">
-                    <label className="text-xs text-muted uppercase tracking-wider">Price</label>
+                    <label className="text-xs text-muted uppercase tracking-wider">Price (GHS)</label>
                     <input
                       type="number"
                       step="0.01"
@@ -440,6 +511,17 @@ function ProductsContent() {
                       onChange={(e) => setFormData({ ...formData, price: e.target.value })}
                       className="input-luxury w-full px-4 py-3 rounded-xl"
                       placeholder="0.00"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-xs text-muted uppercase tracking-wider">Compare Price</label>
+                    <input
+                      type="number"
+                      step="0.01"
+                      value={formData.comparePrice}
+                      onChange={(e) => setFormData({ ...formData, comparePrice: e.target.value })}
+                      className="input-luxury w-full px-4 py-3 rounded-xl"
+                      placeholder="Original price"
                     />
                   </div>
                   <div className="space-y-2">
@@ -466,6 +548,9 @@ function ProductsContent() {
                       <option value="niche">Niche</option>
                     </select>
                   </div>
+                </div>
+
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                   <div className="space-y-2">
                     <label className="text-xs text-muted uppercase tracking-wider">Size</label>
                     <select
@@ -479,97 +564,247 @@ function ProductsContent() {
                       <option value="200ml">200ml</option>
                     </select>
                   </div>
+                  <div className="space-y-2">
+                    <label className="text-xs text-muted uppercase tracking-wider">Concentration</label>
+                    <select
+                      value={formData.concentration}
+                      onChange={(e) => setFormData({ ...formData, concentration: e.target.value })}
+                      className="input-luxury w-full px-4 py-3 rounded-xl"
+                    >
+                      <option value="EDP">EDP</option>
+                      <option value="EDT">EDT</option>
+                      <option value="Parfum">Parfum</option>
+                    </select>
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-xs text-muted uppercase tracking-wider">Flags</label>
+                    <div className="flex gap-3 h-full items-center pt-1">
+                      <label className="flex items-center gap-2 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={formData.featured}
+                          onChange={(e) => setFormData({ ...formData, featured: e.target.checked })}
+                          className="w-4 h-4 rounded border-black/[0.2] dark:border-white/[0.2] text-kartel-gold focus:ring-kartel-gold"
+                        />
+                        <Sparkles className={`w-3.5 h-3.5 ${formData.featured ? 'text-kartel-gold' : 'text-muted'}`} />
+                        <span className="text-xs text-muted">Featured</span>
+                      </label>
+                      <label className="flex items-center gap-2 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={formData.new}
+                          onChange={(e) => setFormData({ ...formData, new: e.target.checked })}
+                          className="w-4 h-4 rounded border-black/[0.2] dark:border-white/[0.2] text-kartel-gold focus:ring-kartel-gold"
+                        />
+                        <span className="text-xs text-muted">New</span>
+                      </label>
+                    </div>
+                  </div>
                 </div>
 
                 <div className="space-y-2">
-                    <label className="text-xs text-muted uppercase tracking-wider">Product Image</label>
-                    <div className="flex gap-2 mb-3">
+                  <label className="text-xs text-muted uppercase tracking-wider">Fragrance Notes</label>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    {NOTE_CATEGORIES.map((cat) => (
+                      <div key={cat} className="space-y-2">
+                        <label className="text-[10px] text-muted uppercase tracking-wider capitalize">{cat}</label>
+                        <div className="flex gap-2">
+                          <input
+                            type="text"
+                            value={noteInput[cat]}
+                            onChange={(e) => setNoteInput({ ...noteInput, [cat]: e.target.value })}
+                            onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); addNote(cat, noteInput[cat]) } }}
+                            className="input-luxury flex-1 px-3 py-2 rounded-xl text-sm"
+                            placeholder={`Add ${cat} note`}
+                            list={`notes-${cat}`}
+                          />
+                          <button
+                            type="button"
+                            onClick={() => addNote(cat, noteInput[cat])}
+                            className="p-2 rounded-xl glass-card text-muted hover:text-kartel-gold transition-all"
+                          >
+                            <Plus className="w-4 h-4" />
+                          </button>
+                        </div>
+                        <datalist id={`notes-${cat}`}>
+                          {NOTE_OPTIONS.map((n) => <option key={n} value={n} />)}
+                        </datalist>
+                        <div className="flex flex-wrap gap-1.5 min-h-[28px]">
+                          {formData.notes[cat].map((note, i) => (
+                            <span key={i} className="inline-flex items-center gap-1 px-2 py-1 text-[11px] rounded-lg bg-kartel-gold/10 text-kartel-gold border border-kartel-gold/20">
+                              {note}
+                              <button type="button" onClick={() => removeNote(cat, i)} className="hover:text-red-400">
+                                <X className="w-3 h-3" />
+                              </button>
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-xs text-muted uppercase tracking-wider">Tags</label>
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      value={tagInput}
+                      onChange={(e) => setTagInput(e.target.value)}
+                      onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); addTag() } }}
+                      className="input-luxury flex-1 px-4 py-3 rounded-xl text-sm"
+                      placeholder="Add a tag and press Enter"
+                    />
+                    <button
+                      type="button"
+                      onClick={addTag}
+                      className="p-3 rounded-xl glass-card text-muted hover:text-kartel-gold transition-all"
+                    >
+                      <Plus className="w-4 h-4" />
+                    </button>
+                  </div>
+                  {formData.tags && (
+                    <div className="flex flex-wrap gap-1.5 mt-2">
+                      {formData.tags.split(',').map((t, i) => t.trim() ? (
+                        <span key={i} className="inline-flex items-center gap-1 px-2.5 py-1 text-[11px] rounded-lg bg-black/[0.05] dark:bg-white/[0.05] text-muted border border-black/[0.08] dark:border-white/[0.08]">
+                          <Tag className="w-3 h-3" />
+                          {t.trim()}
+                          <button type="button" onClick={() => removeTag(i)} className="hover:text-red-400">
+                            <X className="w-3 h-3" />
+                          </button>
+                        </span>
+                      ) : null)}
+                    </div>
+                  )}
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-xs text-muted uppercase tracking-wider">Product Images</label>
+                  <div className="flex gap-2 mb-3">
+                    <button
+                      type="button"
+                      onClick={() => setImageMode('url')}
+                      className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm transition-all ${
+                        imageMode === 'url'
+                          ? 'btn-primary'
+                          : 'glass-card text-muted hover:text-heading'
+                      }`}
+                    >
+                      <LinkIcon className="w-4 h-4" />
+                      URL
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setImageMode('upload')}
+                      className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm transition-all ${
+                        imageMode === 'upload'
+                          ? 'btn-primary'
+                          : 'glass-card text-muted hover:text-heading'
+                      }`}
+                    >
+                      <Upload className="w-4 h-4" />
+                      Upload
+                    </button>
+                  </div>
+                  {imageMode === 'url' ? (
+                    <div className="space-y-2">
+                      {formData.images.map((img, idx) => (
+                        <div key={idx} className="flex gap-2">
+                          <input
+                            type="url"
+                            value={img}
+                            onChange={(e) => {
+                              const updated = [...formData.images]
+                              updated[idx] = e.target.value
+                              setFormData({ ...formData, images: updated })
+                            }}
+                            className="input-luxury flex-1 px-4 py-3 rounded-xl text-sm"
+                            placeholder={`Image URL ${idx + 1}`}
+                          />
+                          {formData.images.length > 1 && (
+                            <button
+                              type="button"
+                              onClick={() => setFormData({ ...formData, images: formData.images.filter((_, i) => i !== idx) })}
+                              className="p-3 rounded-xl glass-card text-muted hover:text-red-400 transition-all"
+                            >
+                              <X className="w-4 h-4" />
+                            </button>
+                          )}
+                        </div>
+                      ))}
                       <button
                         type="button"
-                        onClick={() => setImageMode('url')}
-                        className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm transition-all ${
-                          imageMode === 'url'
-                            ? 'btn-primary'
-                            : 'glass-card text-muted hover:text-heading'
-                        }`}
+                        onClick={() => setFormData({ ...formData, images: [...formData.images, ''] })}
+                        className="text-xs text-kartel-gold hover:underline mt-1"
                       >
-                        <LinkIcon className="w-4 h-4" />
-                        URL
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => setImageMode('upload')}
-                        className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm transition-all ${
-                          imageMode === 'upload'
-                            ? 'btn-primary'
-                            : 'glass-card text-muted hover:text-heading'
-                        }`}
-                      >
-                        <Upload className="w-4 h-4" />
-                        Upload
+                        + Add another image URL
                       </button>
                     </div>
-                    {imageMode === 'url' ? (
+                  ) : (
+                    <div className="space-y-3">
                       <input
-                        type="url"
-                        value={formData.images[0]}
-                        onChange={(e) => setFormData({ ...formData, images: [e.target.value] })}
-                        className="input-luxury w-full px-4 py-3 rounded-xl"
-                        placeholder="https://example.com/image.jpg"
-                      />
-                    ) : (
-                      <div className="relative">
-                        <input
-                          type="file"
-                          accept="image/*"
-                          onChange={async (e) => {
-                            const file = e.target.files?.[0]
-                            if (!file) return
-                            setUploading(true)
-                            const reader = new FileReader()
-                            reader.onload = async () => {
-                              try {
-                                const res = await fetch('/api/upload', {
-                                  method: 'POST',
-                                  headers: { 'Content-Type': 'application/json' },
-                                  body: JSON.stringify({ image: reader.result })
-                                })
-                                const data = await res.json()
-                                if (data.url) {
-                                  setFormData({ ...formData, images: [data.url] })
-                                  toast({ title: 'Upload Successful', description: 'Image uploaded to Cloudinary' })
-                                }
-                              } catch {
-                                toast({ title: 'Upload Failed', description: 'Please try again', variant: 'destructive' })
+                        type="file"
+                        accept="image/*"
+                        ref={fileInputRef}
+                        onChange={async (e) => {
+                          const file = e.target.files?.[0]
+                          if (!file) return
+                          setUploading(true)
+                          const reader = new FileReader()
+                          reader.onload = async () => {
+                            try {
+                              const res = await fetch('/api/upload', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ image: reader.result })
+                              })
+                              const data = await res.json()
+                              if (data.url) {
+                                setFormData({ ...formData, images: [...formData.images.filter(Boolean), data.url] })
+                                toast({ title: 'Upload Successful', description: 'Image uploaded to Cloudinary' })
                               }
-                              setUploading(false)
+                            } catch {
+                              toast({ title: 'Upload Failed', description: 'Please try again', variant: 'destructive' })
                             }
-                            reader.readAsDataURL(file)
-                          }}
-                          className="hidden"
-                          id="image-upload"
-                        />
-                        <label
-                          htmlFor="image-upload"
-                          className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-black/[0.1] dark:border-white/[0.1] rounded-xl cursor-pointer hover:border-kartel-gold/30 transition-all glass"
-                        >
-                          {uploading ? (
-                            <div className="w-8 h-8 border-2 border-kartel-gold/30 border-t-kartel-gold rounded-full animate-spin" />
-                          ) : formData.images[0] ? (
-                            <div className="relative w-full h-full">
-                              <Image src={formData.images[0]} alt="Preview" fill className="object-contain p-2" />
-                              <span className="absolute bottom-2 right-2 text-xs glass px-2 py-1 rounded text-muted">Click to change</span>
+                            setUploading(false)
+                          }
+                          reader.readAsDataURL(file)
+                        }}
+                        className="hidden"
+                        id="image-upload"
+                      />
+                      <label
+                        htmlFor="image-upload"
+                        className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-black/[0.1] dark:border-white/[0.1] rounded-xl cursor-pointer hover:border-kartel-gold/30 transition-all glass"
+                      >
+                        {uploading ? (
+                          <div className="w-8 h-8 border-2 border-kartel-gold/30 border-t-kartel-gold rounded-full animate-spin" />
+                        ) : (
+                          <>
+                            <Upload className="w-8 h-8 text-muted mb-2" />
+                            <span className="text-muted text-sm">Click to upload image</span>
+                          </>
+                        )}
+                      </label>
+                      {formData.images.filter(Boolean).length > 0 && (
+                        <div className="grid grid-cols-4 gap-2">
+                          {formData.images.filter(Boolean).map((img, idx) => (
+                            <div key={idx} className="relative group aspect-square rounded-xl overflow-hidden border border-black/[0.05] dark:border-white/[0.05]">
+                              <Image src={img} alt={`Product ${idx + 1}`} fill className="object-cover" />
+                              <button
+                                type="button"
+                                onClick={() => setFormData({ ...formData, images: formData.images.filter((_, i) => i !== idx) })}
+                                className="absolute top-1 right-1 p-1 rounded-lg bg-black/60 text-white opacity-0 group-hover:opacity-100 transition-opacity"
+                              >
+                                <X className="w-3 h-3" />
+                              </button>
                             </div>
-                          ) : (
-                            <>
-                              <Upload className="w-8 h-8 text-muted mb-2" />
-                              <span className="text-muted text-sm">Click to upload image</span>
-                            </>
-                          )}
-                        </label>
-                      </div>
-                    )}
-                  </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
 
                 <div className="flex gap-3 pt-4">
                   <button
