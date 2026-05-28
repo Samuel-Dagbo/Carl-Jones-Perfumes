@@ -57,6 +57,12 @@ export function Navbar() {
     { href: '/contact', label: 'Contact' },
   ]
 
+  const adminLinks = isAdmin
+    ? [{ href: '/admin', label: 'Admin' }, { href: '/admin/products?action=add', label: 'Add Product' }]
+    : []
+
+  const desktopLinks = [...adminLinks, ...navLinks]
+
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 30)
@@ -104,7 +110,7 @@ export function Navbar() {
                     : 'bg-black/[0.02] border-black/[0.08]'
                 }`}
               >
-                {navLinks.map((link) => (
+                {desktopLinks.map((link, i) => (
                   <Link
                     key={link.href}
                     href={link.href}
@@ -112,7 +118,7 @@ export function Navbar() {
                       theme === 'dark'
                         ? 'hover:text-kartel-gold'
                         : 'hover:text-kartel-gold'
-                    }`}
+                    } ${isAdmin && i < adminLinks.length ? 'text-kartel-gold' : ''}`}
                   >
                     {link.label}
                     <span className="absolute bottom-1 left-1/2 -translate-x-1/2 w-0 h-px bg-kartel-gold rounded-full transition-all duration-500 ease-luxury group-hover:w-1/2" />
@@ -377,7 +383,7 @@ export function Navbar() {
                     : 'bg-white/98 border-black/[0.05]'
                 }`}
               >
-                {navLinks.map((link, i) => (
+                {desktopLinks.map((link, i) => (
                   <motion.div
                     key={link.href}
                     initial={{ opacity: 0, x: -20 }}
@@ -392,9 +398,11 @@ export function Navbar() {
                       href={link.href}
                       onClick={() => setIsMobileMenuOpen(false)}
                       className={`flex items-center justify-between py-3.5 text-lg transition-colors group ${
-                        theme === 'dark'
-                          ? 'text-white/70 hover:text-kartel-gold'
-                          : 'text-black/70 hover:text-kartel-gold'
+                        isAdmin && i < adminLinks.length
+                          ? 'text-kartel-gold'
+                          : theme === 'dark'
+                            ? 'text-white/70 hover:text-kartel-gold'
+                            : 'text-black/70 hover:text-kartel-gold'
                       }`}
                     >
                       {link.label}
