@@ -268,9 +268,9 @@ export default function ShopPage() {
                   <X className="w-3 h-3" strokeWidth={2} />
                 </button>
               )}
-              {priceRange[1] < 1000 && (
+              {priceRange[1] < 15000 && (
                 <button
-                  onClick={() => setPriceRange([0, 1000])}
+                  onClick={() => setPriceRange([0, 15000])}
                   className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-kartel-gold/8 border border-kartel-gold/15 text-xs text-kartel-gold hover:bg-kartel-gold/15 transition-all"
                 >
                   Under GHS {priceRange[1]}

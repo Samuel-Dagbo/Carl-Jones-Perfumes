@@ -3,6 +3,7 @@ import connectDB from '@/lib/db'
 import Order from '@/models/Order'
 import Product from '@/models/Product'
 import User from '@/models/User'
+import InventoryLog from '@/models/InventoryLog'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { sendOrderConfirmationEmail } from '@/lib/email'
@@ -91,6 +92,18 @@ export async function POST(req: NextRequest) {
       
       if (updated.quantity === 0) {
         await Product.findByIdAndUpdate(item.product, { inStock: false })
+      }
+
+      if (userId) {
+        await InventoryLog.create({
+          product: item.product,
+          type: 'removal',
+          quantity: item.quantity,
+          previousQuantity: product.quantity,
+          newQuantity: updated.quantity,
+          reason: 'Order placement',
+          user: userId,
+        }).catch(err => console.error('Inventory log failed:', err))
       }
     }
 

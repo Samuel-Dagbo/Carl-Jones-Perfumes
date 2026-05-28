@@ -3,20 +3,23 @@
 import { useState, useEffect, Suspense } from 'react'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
-import { ShoppingBag, Heart, Star, ChevronRight, ChevronLeft, Truck, ShieldCheck, Sparkles } from 'lucide-react'
+import { ShoppingBag, Heart, Star, ChevronRight, ChevronLeft, Truck, ShieldCheck, Sparkles, HeartOff } from 'lucide-react'
 import Link from 'next/link'
 import { useCart } from '@/components/providers/CartProvider'
 import { formatPrice } from '@/lib/utils'
 import { toast } from '@/components/ui/use-toast'
 import { Product as ProductType } from '@/types'
 import { useTheme } from '@/components/providers/ThemeProvider'
+import { useSession } from 'next-auth/react'
 
 function ProductContent({ id }: { id: string }) {
   const [product, setProduct] = useState<ProductType | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [activeImage, setActiveImage] = useState(0)
+  const [inWishlist, setInWishlist] = useState(false)
   const { addItem } = useCart()
   const { theme } = useTheme()
+  const { data: session } = useSession()
   const isDark = theme === 'dark'
 
   useEffect(() => {
@@ -49,6 +52,45 @@ function ProductContent({ id }: { id: string }) {
       description: `${product.name} has been added to your cart.`,
     })
   }
+
+  const handleToggleWishlist = async () => {
+    if (!product) return
+    if (!session) {
+      toast({ title: "Sign in required", description: "Please sign in to save items to your wishlist." })
+      return
+    }
+    try {
+      if (inWishlist) {
+        const res = await fetch(`/api/wishlist?productId=${product._id}`, { method: 'DELETE' })
+        if (res.ok) {
+          setInWishlist(false)
+          toast({ title: "Removed", description: "Removed from wishlist." })
+        }
+      } else {
+        const res = await fetch('/api/wishlist', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ productId: product._id }),
+        })
+        if (res.ok) {
+          setInWishlist(true)
+          toast({ title: "Saved", description: "Added to wishlist." })
+        }
+      }
+    } catch {
+      toast({ title: "Error", description: "Something went wrong.", variant: 'destructive' })
+    }
+  }
+
+  useEffect(() => {
+    if (product && session) {
+      fetch('/api/wishlist').then(r => r.json()).then((data) => {
+        if (Array.isArray(data)) {
+          setInWishlist(data.some((p: any) => p._id === product._id))
+        }
+      }).catch(() => {})
+    }
+  }, [product, session])
 
   const nextImage = () => setActiveImage((prev) => (prev + 1) % (product?.images.length || 1))
   const prevImage = () => setActiveImage((prev) => (prev - 1 + (product?.images.length || 1)) % (product?.images.length || 1))
@@ -214,8 +256,19 @@ function ProductContent({ id }: { id: string }) {
                   <ShoppingBag className="w-5 h-5" strokeWidth={1.5} />
                   Add to Bag
                 </button>
-                <button className="btn-ghost p-4 flex items-center justify-center shrink-0">
-                  <Heart className="w-5 h-5" strokeWidth={1.5} />
+                <button
+                  onClick={handleToggleWishlist}
+                  className={`p-4 flex items-center justify-center shrink-0 rounded-full transition-all duration-300 ${
+                    inWishlist
+                      ? 'bg-red-500/10 text-red-500 border border-red-500/20'
+                      : 'btn-ghost'
+                  }`}
+                >
+                  {inWishlist ? (
+                    <Heart className="w-5 h-5 fill-red-500" strokeWidth={1.5} />
+                  ) : (
+                    <Heart className="w-5 h-5" strokeWidth={1.5} />
+                  )}
                 </button>
               </div>
 

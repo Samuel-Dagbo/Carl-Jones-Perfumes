@@ -9,6 +9,8 @@ import { useCart } from '@/components/providers/CartProvider'
 import { useTheme } from '@/components/providers/ThemeProvider'
 import { toast } from '@/components/ui/use-toast'
 import { cn, formatPrice } from '@/lib/utils'
+import { useSession } from 'next-auth/react'
+import { useState, useEffect } from 'react'
 
 interface ProductCardProps {
   product: Product
@@ -19,7 +21,19 @@ interface ProductCardProps {
 export function ProductCard({ product, index = 0, variant = 'default' }: ProductCardProps) {
   const { addItem } = useCart()
   const { theme } = useTheme()
+  const { data: session } = useSession()
   const isDark = theme === 'dark'
+  const [inWishlist, setInWishlist] = useState(false)
+
+  useEffect(() => {
+    if (session) {
+      fetch('/api/wishlist').then(r => r.json()).then((data) => {
+        if (Array.isArray(data)) {
+          setInWishlist(data.some((p: any) => p._id === product._id))
+        }
+      }).catch(() => {})
+    }
+  }, [session, product._id])
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault()
@@ -29,6 +43,36 @@ export function ProductCard({ product, index = 0, variant = 'default' }: Product
       title: 'Added to cart',
       description: `${product.name} has been added to your cart.`,
     })
+  }
+
+  const handleToggleWishlist = async (e: React.MouseEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    if (!session) {
+      toast({ title: "Sign in required", description: "Please sign in to save items." })
+      return
+    }
+    try {
+      if (inWishlist) {
+        const res = await fetch(`/api/wishlist?productId=${product._id}`, { method: 'DELETE' })
+        if (res.ok) {
+          setInWishlist(false)
+          toast({ title: "Removed", description: "Removed from wishlist." })
+        }
+      } else {
+        const res = await fetch('/api/wishlist', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ productId: product._id }),
+        })
+        if (res.ok) {
+          setInWishlist(true)
+          toast({ title: "Saved", description: "Added to wishlist." })
+        }
+      }
+    } catch {
+      toast({ title: "Error", description: "Something went wrong.", variant: 'destructive' })
+    }
   }
 
   const discountPercent = product.comparePrice
@@ -149,9 +193,14 @@ export function ProductCard({ product, index = 0, variant = 'default' }: Product
               <motion.button
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
-                className="p-4 rounded-full glass-dark transform translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 delay-150"
+                onClick={handleToggleWishlist}
+                className={`p-4 rounded-full transform translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 delay-150 ${
+                  inWishlist
+                    ? 'bg-red-500/80 text-white'
+                    : 'glass-dark'
+                }`}
               >
-                <Heart className="w-5 h-5" strokeWidth={2} />
+                <Heart className={`w-5 h-5 ${inWishlist ? 'fill-white' : ''}`} strokeWidth={2} />
               </motion.button>
             </div>
 

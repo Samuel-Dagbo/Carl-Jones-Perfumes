@@ -1,16 +1,17 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { signIn, useSession } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
+import { signIn, useSession, getSession } from 'next-auth/react'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { motion } from 'framer-motion'
 import { Mail, Lock, Eye, EyeOff, ArrowRight, Sparkles, ArrowLeft, Sun, Moon } from 'lucide-react'
 import { useTheme } from '@/components/providers/ThemeProvider'
 
-export default function LoginPage() {
+function LoginContent() {
   const router = useRouter()
+  const searchParams = useSearchParams()
   const { data: session, status } = useSession()
   const { theme, toggleTheme } = useTheme()
   const [email, setEmail] = useState('')
@@ -19,15 +20,19 @@ export default function LoginPage() {
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
 
+  const callbackUrl = searchParams.get('callbackUrl') || ''
+
   useEffect(() => {
     if (session?.user && status === 'authenticated') {
-      if (session.user.role === 'admin') {
+      if (callbackUrl) {
+        router.replace(callbackUrl)
+      } else if (session.user.role === 'admin') {
         router.replace('/admin')
       } else {
         router.replace('/customer')
       }
     }
-  }, [session, status, router])
+  }, [session, status, router, callbackUrl])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -44,8 +49,10 @@ export default function LoginPage() {
       if (result?.error) {
         setError('Invalid email or password')
       } else if (result?.ok) {
-        const callbackUrl = '/customer'
-        router.push(callbackUrl)
+        const updatedSession = await getSession()
+        const role = updatedSession?.user?.role
+        const dest = callbackUrl || (role === 'admin' ? '/admin' : '/customer')
+        router.push(dest)
         router.refresh()
       }
     } catch {
@@ -260,5 +267,17 @@ export default function LoginPage() {
         </motion.div>
       </div>
     </div>
+  )
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="w-8 h-8 border-2 border-kartel-gold border-t-transparent rounded-full animate-spin" />
+      </div>
+    }>
+      <LoginContent />
+    </Suspense>
   )
 }
