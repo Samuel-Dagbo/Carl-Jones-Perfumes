@@ -15,6 +15,7 @@ import {
   Star,
   FileText,
   CreditCard,
+  Plus,
   X,
   ChevronLeft,
   ChevronRight,
@@ -83,8 +84,21 @@ export function Sidebar({ isOpen, onClose, isCollapsed, onToggleCollapse }: Side
         </button>
       </div>
 
+      {/* Quick add */}
+      {!isCollapsed && (
+        <div className="px-3 pt-3 pb-1">
+          <Link
+            href="/admin/products?action=add"
+            onClick={onClose}
+            className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 bg-gradient-to-r from-kartel-gold/15 to-kartel-gold/5 border border-kartel-gold/20 text-kartel-gold hover:from-kartel-gold/25 hover:to-kartel-gold/10 hover:shadow-gold-glow`}
+          >
+            <Plus className="w-5 h-5 flex-shrink-0" strokeWidth={2} />
+            <span>Add Product</span>
+          </Link>
+        </div>
+      )}
       {/* Navigation */}
-      <nav className="flex-1 overflow-y-auto py-4 px-3 space-y-1">
+      <nav className="flex-1 overflow-y-auto py-2 px-3 space-y-1">
         {navItems.map((item) => {
           const isActive = pathname === item.href || (item.href !== '/admin' && pathname.startsWith(item.href))
           const Icon = item.icon

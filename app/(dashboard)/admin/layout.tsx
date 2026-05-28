@@ -123,7 +123,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </header>
 
         {/* Main content */}
-        <main className="flex-1 overflow-auto">
+        <main className={`flex-1 overflow-auto transition-colors duration-300 ${
+          isDark ? 'bg-black/20' : 'bg-kartel-white-50/50'
+        }`}>
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}

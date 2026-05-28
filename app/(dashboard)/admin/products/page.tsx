@@ -267,7 +267,7 @@ function ProductsContent() {
         </div>
         <button 
           onClick={() => { resetForm(); setEditingProduct(null); setIsModalOpen(true) }}
-          className="btn-primary inline-flex items-center gap-2 px-5 py-2.5"
+          className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-kartel-gold to-amber-600 text-kartel-black font-semibold text-sm shadow-lg shadow-kartel-gold/25 hover:shadow-kartel-gold/40 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300"
         >
           <Plus className="w-4 h-4" />
           Add Product
@@ -422,8 +422,23 @@ function ProductsContent() {
                       <div className="w-14 h-14 rounded-full glass-card flex items-center justify-center mb-4">
                         <Package className="w-6 h-6 text-muted" />
                       </div>
-                      <p className="text-muted">No products found</p>
-                      <p className="text-muted/50 text-sm mt-1">Try adjusting your search or filters</p>
+                      <p className="text-muted">
+                        {products.length === 0 ? 'No products yet' : 'No products found'}
+                      </p>
+                      <p className="text-muted/50 text-sm mt-1">
+                        {products.length === 0
+                          ? 'Add your first fragrance to get started'
+                          : 'Try adjusting your search or filters'}
+                      </p>
+                      {products.length === 0 && (
+                        <button
+                          onClick={() => { resetForm(); setEditingProduct(null); setIsModalOpen(true) }}
+                          className="mt-6 inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-kartel-gold to-amber-600 text-kartel-black font-semibold text-sm shadow-lg shadow-kartel-gold/25 hover:shadow-kartel-gold/40 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300"
+                        >
+                          <Plus className="w-4 h-4" />
+                          Create Your First Product
+                        </button>
+                      )}
                     </div>
                   </td>
                 </tr>
