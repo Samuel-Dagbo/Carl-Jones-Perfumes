@@ -6,15 +6,4 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 })
 
-export async function uploadToCloudinary(file: string): Promise<string> {
-  const result = await cloudinary.uploader.upload(file, {
-    folder: 'kartel-products',
-    transformation: [
-      { width: 800, height: 800, crop: 'limit' },
-      { quality: 'auto' },
-    ],
-  })
-  return result.secure_url
-}
-
 export default cloudinary

@@ -773,6 +773,10 @@ function ProductsContent() {
                         onChange={async (e) => {
                           const file = e.target.files?.[0]
                           if (!file) return
+                          if (file.size > 10 * 1024 * 1024) {
+                            toast({ title: 'File Too Large', description: 'Maximum file size is 10MB', variant: 'destructive' })
+                            return
+                          }
                           setUploading(true)
                           const reader = new FileReader()
                           reader.onload = async () => {
@@ -783,12 +787,16 @@ function ProductsContent() {
                                 body: JSON.stringify({ image: reader.result })
                               })
                               const data = await res.json()
-                              if (data.url) {
+                              if (!res.ok || !data.url) {
+                                toast({ title: 'Upload Failed', description: data.error || 'Server error. Check console for details.', variant: 'destructive' })
+                                console.error('Upload error:', data)
+                              } else {
                                 setFormData({ ...formData, images: [...formData.images.filter(Boolean), data.url] })
                                 toast({ title: 'Upload Successful', description: 'Image uploaded to Cloudinary' })
                               }
-                            } catch {
-                              toast({ title: 'Upload Failed', description: 'Please try again', variant: 'destructive' })
+                            } catch (err) {
+                              toast({ title: 'Upload Failed', description: 'Network error. Check console.', variant: 'destructive' })
+                              console.error('Upload network error:', err)
                             }
                             setUploading(false)
                           }
