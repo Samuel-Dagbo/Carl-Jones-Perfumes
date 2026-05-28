@@ -260,6 +260,7 @@ export default function BestSellersCarousel({ products = [] }: BestSellersCarous
                       sizes="(max-width: 1024px) 100vw, 50vw"
                       className="object-contain p-6 sm:p-8 drop-shadow-2xl"
                       loading="lazy"
+                      onError={(e) => { (e.target as HTMLImageElement).src = '/placeholder.svg' }}
                     />
 
                     {/* Decorative elements */}

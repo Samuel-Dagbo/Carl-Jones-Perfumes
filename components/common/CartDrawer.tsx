@@ -114,10 +114,11 @@ export function CartDrawer() {
                           isDark ? 'border-white/[0.08]' : 'border-black/[0.08]'
                         }`}>
                           <Image
-                            src={item.product.images[0]}
+                            src={item.product.images[0] || '/placeholder.svg'}
                             alt={item.product.name}
                             fill
                             className="object-cover"
+                            onError={(e) => { (e.target as HTMLImageElement).src = '/placeholder.svg' }}
                           />
                         </div>
                         <div className="flex-1 flex flex-col justify-between py-0.5 min-w-0">

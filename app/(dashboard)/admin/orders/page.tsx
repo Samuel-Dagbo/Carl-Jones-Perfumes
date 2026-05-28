@@ -413,7 +413,7 @@ export default function AdminOrdersPage() {
                       <div key={i} className="flex items-center gap-4">
                         <div className="relative w-12 h-12 rounded-lg overflow-hidden glass shrink-0">
                           {item.product?.images?.[0] ? (
-                            <Image src={item.product.images[0]} alt={item.product.name} fill className="object-cover" />
+                            <Image src={item.product.images[0]} alt={item.product.name} fill className="object-cover" onError={(e) => { (e.target as HTMLImageElement).src = '/placeholder.svg' }} />
                           ) : (
                             <div className="w-full h-full flex items-center justify-center">
                               <Package className="w-5 h-5 text-muted" />

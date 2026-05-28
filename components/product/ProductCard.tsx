@@ -90,11 +90,12 @@ export function ProductCard({ product, index = 0, variant = 'default' }: Product
           <div className="flex gap-5 p-4 glass-card rounded-2xl hover:border-kartel-gold/[0.15] transition-all duration-500 shadow-sm hover:shadow-luxury">
             <div className="relative w-28 h-28 sm:w-36 sm:h-36 rounded-xl overflow-hidden shrink-0">
               <Image
-                src={product.images[0] || '/placeholder.jpg'}
+                src={product.images[0] || '/placeholder.svg'}
                 alt={product.name}
                 fill
                 sizes="144px"
                 className="object-cover transition-all duration-700 group-hover:scale-105"
+                onError={(e) => { (e.target as HTMLImageElement).src = '/placeholder.svg' }}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
             </div>
@@ -169,11 +170,12 @@ export function ProductCard({ product, index = 0, variant = 'default' }: Product
           {/* Image Container */}
           <div className="relative aspect-[4/5] overflow-hidden">
             <Image
-              src={product.images[0] || '/placeholder.jpg'}
+              src={product.images[0] || '/placeholder.svg'}
               alt={product.name}
               fill
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
               className="object-cover transition-all duration-1000 ease-out scale-105 group-hover:scale-100"
+              onError={(e) => { (e.target as HTMLImageElement).src = '/placeholder.svg' }}
             />
 
             {/* Multi-layer gradient overlays */}

@@ -246,7 +246,7 @@ export default function POSPage() {
               >
                 <div className="aspect-square rounded-lg bg-gradient-to-br from-kartel-gold/5 to-kartel-gold/10 flex items-center justify-center mb-2 overflow-hidden">
                   {product.images?.[0] ? (
-                    <img src={product.images[0]} alt={product.name} className="w-full h-full object-cover" />
+                    <img src={product.images[0] || '/placeholder.svg'} alt={product.name} className="w-full h-full object-cover" onError={(e) => { (e.target as HTMLImageElement).src = '/placeholder.svg' }} />
                   ) : (
                     <Package className="w-8 h-8 text-kartel-gold/30" strokeWidth={1} />
                   )}
@@ -300,7 +300,7 @@ export default function POSPage() {
               >
                 <div className="w-10 h-10 rounded-lg bg-kartel-gold/10 flex items-center justify-center flex-shrink-0 overflow-hidden">
                   {item.product.images?.[0] ? (
-                    <img src={item.product.images[0]} alt={item.product.name} className="w-full h-full object-cover" />
+                    <img src={item.product.images[0]} alt={item.product.name} className="w-full h-full object-cover" onError={(e) => { (e.target as HTMLImageElement).src = '/placeholder.svg' }} />
                   ) : (
                     <Package className="w-5 h-5 text-kartel-gold/50" strokeWidth={1} />
                   )}

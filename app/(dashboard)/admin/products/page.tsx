@@ -95,8 +95,17 @@ function ProductsContent() {
         ? formData.tags.split(',').map(t => t.trim()).filter(Boolean)
         : []
 
+      const cleanImages = formData.images.filter(Boolean)
+
+      if (cleanImages.length === 0) {
+        toast({ title: 'Validation Error', description: 'At least one product image is required', variant: 'destructive' })
+        setSaving(false)
+        return
+      }
+
       const payload = {
         ...formData,
+        images: cleanImages,
         tags: tagsArray,
         price: parseFloat(formData.price),
         comparePrice: formData.comparePrice ? parseFloat(formData.comparePrice) : undefined,
@@ -360,7 +369,7 @@ function ProductsContent() {
                       <div className="flex items-center gap-3">
                         <div className="relative w-12 h-12 rounded-xl overflow-hidden border border-black/[0.05] dark:border-white/[0.05] glass shrink-0">
                           {product.images?.[0] ? (
-                            <Image src={product.images[0]} alt={product.name} fill className="object-cover" />
+                            <Image src={product.images[0]} alt={product.name} fill className="object-cover" onError={(e) => { (e.target as HTMLImageElement).src = '/placeholder.svg' }} />
                           ) : (
                             <div className="w-full h-full flex items-center justify-center">
                               <Package className="w-5 h-5 text-muted" />
@@ -805,7 +814,7 @@ function ProductsContent() {
                         <div className="grid grid-cols-4 gap-2">
                           {formData.images.filter(Boolean).map((img, idx) => (
                             <div key={idx} className="relative group aspect-square rounded-xl overflow-hidden border border-black/[0.05] dark:border-white/[0.05]">
-                              <Image src={img} alt={`Product ${idx + 1}`} fill className="object-cover" />
+                              <Image src={img} alt={`Product ${idx + 1}`} fill className="object-cover" onError={(e) => { (e.target as HTMLImageElement).src = '/placeholder.svg' }} />
                               <button
                                 type="button"
                                 onClick={() => setFormData({ ...formData, images: formData.images.filter((_, i) => i !== idx) })}

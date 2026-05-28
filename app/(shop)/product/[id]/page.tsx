@@ -148,11 +148,12 @@ function ProductContent({ id }: { id: string }) {
                 isDark ? 'bg-kartel-black-900' : 'bg-kartel-white-50'
               }`}>
                 <Image
-                  src={product.images[activeImage] || '/placeholder.jpg'}
+                  src={product.images[activeImage] || '/placeholder.svg'}
                   alt={product.name}
                   fill
                   className="object-cover transition-all duration-700"
                   priority
+                  onError={(e) => { (e.target as HTMLImageElement).src = '/placeholder.svg' }}
                 />
               </div>
 
@@ -188,7 +189,7 @@ function ProductContent({ id }: { id: string }) {
                         : isDark ? 'border-white/[0.05] opacity-50 hover:opacity-80' : 'border-black/[0.06] opacity-50 hover:opacity-80'
                     }`}
                   >
-                    <Image src={img} alt={product.name} fill className="object-cover" />
+                    <Image src={img} alt={product.name} fill className="object-cover" onError={(e) => { (e.target as HTMLImageElement).src = '/placeholder.svg' }} />
                   </button>
                 ))}
               </div>
