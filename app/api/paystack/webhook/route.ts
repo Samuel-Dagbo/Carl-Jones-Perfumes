@@ -41,6 +41,15 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ error: 'Order not found' }, { status: 404 })
       }
 
+      if (Math.abs((data.amount / 100) - order.totalAmount) > 1) {
+        console.error(`Webhook: Amount mismatch for order ${order.orderNumber}`)
+        await Order.findOneAndUpdate(
+          { _id: order._id, paymentStatus: 'pending' },
+          { paymentStatus: 'failed', status: 'cancelled', paystackReference: reference }
+        )
+        return NextResponse.json({ error: 'Amount mismatch' }, { status: 400 })
+      }
+
       const updatedOrder = await Order.findOneAndUpdate(
         { _id: order._id, paymentStatus: 'pending' },
         { paymentStatus: 'completed', status: 'processing', paystackReference: reference },
@@ -52,6 +61,7 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ message: 'Already processed' }, { status: 200 })
       }
 
+      let stockFailed = false
       for (const item of updatedOrder.items) {
         const updated = await Product.findOneAndUpdate(
           { _id: item.product, quantity: { $gte: item.quantity } },
@@ -61,12 +71,18 @@ export async function POST(req: NextRequest) {
 
         if (!updated) {
           console.error(`Webhook: Stock insufficient for product ${item.product}`)
+          stockFailed = true
           continue
         }
 
         if (updated.quantity === 0) {
           await Product.findByIdAndUpdate(item.product, { inStock: false })
         }
+      }
+
+      if (stockFailed) {
+        updatedOrder.status = 'on_hold'
+        await updatedOrder.save()
       }
 
       const populatedOrder = await Order.findById(updatedOrder._id)

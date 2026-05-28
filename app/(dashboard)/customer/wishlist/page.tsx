@@ -46,7 +46,7 @@ export default function WishlistPage() {
   }
 
   const moveToCart = (product: ProductType) => {
-    addItem({ product, quantity: 1 })
+    addItem({ product, quantity: 1, size: product.size })
     removeFromWishlist(product._id)
     toast({
       title: "Moved to cart",

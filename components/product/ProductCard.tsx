@@ -38,7 +38,7 @@ export function ProductCard({ product, index = 0, variant = 'default' }: Product
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault()
     e.stopPropagation()
-    addItem({ product, quantity: 1 })
+    addItem({ product, quantity: 1, size: product.size })
     toast({
       title: 'Added to cart',
       description: `${product.name} has been added to your cart.`,

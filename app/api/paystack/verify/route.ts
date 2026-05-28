@@ -57,6 +57,13 @@ export async function GET(req: NextRequest) {
       }, { status: 200 })
     }
 
+    if (Math.abs(verification.amount - order.totalAmount) > 1) {
+      return NextResponse.json({
+        success: false,
+        error: 'Payment amount does not match order total',
+      }, { status: 400 })
+    }
+
     const updatedOrder = await Order.findOneAndUpdate(
       { _id: order._id, paymentStatus: 'pending' },
       { paymentStatus: 'completed', status: 'processing', paystackReference: reference },
@@ -77,6 +84,7 @@ export async function GET(req: NextRequest) {
       }, { status: 200 })
     }
 
+    let stockFailed = false
     for (const item of updatedOrder.items) {
       const updated = await Product.findOneAndUpdate(
         { _id: item.product, quantity: { $gte: item.quantity } },
@@ -86,12 +94,19 @@ export async function GET(req: NextRequest) {
 
       if (!updated) {
         console.error(`Stock insufficient for product ${item.product} during payment verification`)
+        stockFailed = true
         continue
       }
 
       if (updated.quantity === 0) {
         await Product.findByIdAndUpdate(item.product, { inStock: false })
       }
+    }
+
+    if (stockFailed) {
+      updatedOrder.status = 'on_hold'
+      updatedOrder.paymentStatus = 'completed'
+      await updatedOrder.save()
     }
 
     const populatedOrder = await Order.findById(updatedOrder._id)

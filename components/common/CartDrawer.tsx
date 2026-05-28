@@ -95,7 +95,7 @@ export function CartDrawer() {
                   <AnimatePresence mode="popLayout">
                     {items.map((item) => (
                       <motion.div
-                        key={item.product._id}
+                        key={item.uniqueId}
                         layout
                         initial={{ opacity: 0, y: 12 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -129,9 +129,14 @@ export function CartDrawer() {
                               <p className={`text-xs mt-0.5 ${isDark ? 'text-white/50' : 'text-black/50'}`}>
                                 {item.product.brand}
                               </p>
+                              {item.size && (
+                                <p className={`text-xs mt-0.5 ${isDark ? 'text-kartel-gold/70' : 'text-kartel-gold'}`}>
+                                  Size: {item.size}
+                                </p>
+                              )}
                             </div>
                             <button
-                              onClick={() => removeItem(item.product._id)}
+                              onClick={() => removeItem(item.uniqueId!)}
                               className={`p-1.5 rounded-full transition-all shrink-0 ${
                                 isDark
                                   ? 'text-white/40 hover:text-red-500 hover:bg-red-500/10'
@@ -150,7 +155,7 @@ export function CartDrawer() {
                             }`}>
                               <button
                                 onClick={() =>
-                                  updateQuantity(item.product._id, item.quantity - 1)
+                                  updateQuantity(item.uniqueId!, item.quantity - 1)
                                 }
                                 className={`p-1 transition-colors ${
                                   isDark ? 'text-white/50 hover:text-kartel-gold' : 'text-black/50 hover:text-kartel-gold'
@@ -164,7 +169,7 @@ export function CartDrawer() {
                               </span>
                               <button
                                 onClick={() =>
-                                  updateQuantity(item.product._id, item.quantity + 1)
+                                  updateQuantity(item.uniqueId!, item.quantity + 1)
                                 }
                                 className={`p-1 transition-colors ${
                                   isDark ? 'text-white/50 hover:text-kartel-gold' : 'text-black/50 hover:text-kartel-gold'

@@ -44,6 +44,8 @@ export async function POST(req: NextRequest) {
       }
     }
 
+    let calculatedTotal = 0
+    const validatedItems: { product: string; quantity: number; price: number }[] = []
     for (const item of items) {
       const product = await Product.findById(item.product)
       if (!product) {
@@ -54,19 +56,22 @@ export async function POST(req: NextRequest) {
           error: `Insufficient stock for ${product.name}. Available: ${product.quantity}`
         }, { status: 400 })
       }
+      const price = product.price
+      validatedItems.push({ product: item.product, quantity: item.quantity, price })
+      calculatedTotal += price * item.quantity
     }
 
-    const orderNumber = `CJ-${Date.now().toString(36).toUpperCase()}`
+    if (Math.abs(calculatedTotal - totalAmount) > 1) {
+      return NextResponse.json({ error: 'Price mismatch. Please refresh and try again.' }, { status: 400 })
+    }
+
+    const orderNumber = `CJ-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).slice(2, 6).toUpperCase()}`
 
     const orderData: Record<string, unknown> = {
       orderNumber,
-      items: items.map((item: { product: string; quantity: number; price: number }) => ({
-        product: item.product,
-        quantity: item.quantity,
-        price: item.price,
-      })),
+      items: validatedItems,
       shippingAddress,
-      totalAmount,
+      totalAmount: calculatedTotal,
       status: 'pending',
       paymentStatus: 'pending',
       paymentMethod: 'card',

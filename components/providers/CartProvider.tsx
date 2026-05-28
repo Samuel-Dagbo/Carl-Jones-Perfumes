@@ -24,14 +24,19 @@ const initialState: CartState = {
   isOpen: false,
 }
 
+function makeUniqueId(item: { product: { _id: string }; size?: string }) {
+  return `${item.product._id}|${item.size || 'default'}`
+}
+
 function cartReducer(state: CartState, action: CartAction): CartState {
   switch (action.type) {
     case 'HYDRATE':
       return { ...state, items: action.payload }
 
     case 'ADD_ITEM': {
+      const uniqueId = makeUniqueId(action.payload)
       const existingItemIndex = state.items.findIndex(
-        (item) => item.product._id === action.payload.product._id
+        (item) => makeUniqueId(item) === uniqueId
       )
       if (existingItemIndex >= 0) {
         const newItems = [...state.items]
@@ -41,13 +46,13 @@ function cartReducer(state: CartState, action: CartAction): CartState {
         }
         return { ...state, items: newItems }
       }
-      return { ...state, items: [...state.items, action.payload] }
+      return { ...state, items: [...state.items, { ...action.payload, uniqueId }] }
     }
 
     case 'REMOVE_ITEM':
       return {
         ...state,
-        items: state.items.filter((item) => item.product._id !== action.payload),
+        items: state.items.filter((item) => (item.uniqueId || makeUniqueId(item)) !== action.payload),
       }
 
     case 'UPDATE_QUANTITY': {
@@ -55,13 +60,13 @@ function cartReducer(state: CartState, action: CartAction): CartState {
       if (quantity <= 0) {
         return {
           ...state,
-          items: state.items.filter((item) => item.product._id !== id),
+          items: state.items.filter((item) => (item.uniqueId || makeUniqueId(item)) !== id),
         }
       }
       return {
         ...state,
         items: state.items.map((item) =>
-          item.product._id === id ? { ...item, quantity } : item
+          (item.uniqueId || makeUniqueId(item)) === id ? { ...item, quantity } : item
         ),
       }
     }

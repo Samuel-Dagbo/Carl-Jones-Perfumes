@@ -46,7 +46,7 @@ function ProductContent({ id }: { id: string }) {
 
   const handleAddToCart = () => {
     if (!product) return
-    addItem({ product, quantity: 1 })
+    addItem({ product, quantity: 1, size: product.size })
     toast({
       title: "Added to cart",
       description: `${product.name} has been added to your cart.`,
