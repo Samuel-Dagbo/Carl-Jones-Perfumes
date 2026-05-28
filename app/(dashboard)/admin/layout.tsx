@@ -45,7 +45,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         onToggleCollapse={() => setSidebarCollapsed(!sidebarCollapsed)}
       />
 
-      <div className="flex flex-col flex-1 min-w-0">
+      <div className="flex flex-col flex-1 min-w-0 pt-[4.5rem] lg:pt-24">
         {/* Top navigation bar */}
         <header
           className={`sticky top-[4.5rem] lg:top-24 z-30 transition-all duration-300 border-b backdrop-blur-xl ${
