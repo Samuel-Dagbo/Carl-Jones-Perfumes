@@ -157,9 +157,9 @@ export function Sidebar({ isOpen, onClose, isCollapsed, onToggleCollapse }: Side
 
   return (
     <>
-      {/* Desktop sidebar */}
+      {/* Desktop sidebar — flex child, sticky within scroll container */}
       <aside
-        className={`hidden lg:block fixed top-[4.5rem] lg:top-24 left-0 h-[calc(100%-4.5rem)] lg:h-[calc(100%-6rem)] z-40 transition-all duration-300 ${
+        className={`hidden lg:flex flex-col shrink-0 h-screen sticky top-0 z-40 transition-all duration-300 ${
           isCollapsed ? 'w-20' : 'w-64'
         }`}
       >
