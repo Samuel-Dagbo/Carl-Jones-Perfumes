@@ -1,197 +1,256 @@
 'use client'
 
 import { motion, useScroll, useTransform } from 'framer-motion'
-import Image from 'next/image'
-import Link from 'next/link'
 import { useRef } from 'react'
-import { ArrowRight, Sparkles, Star } from 'lucide-react'
+
+const rng = (seed: number) => {
+  const x = Math.sin(seed) * 10000
+  return x - Math.floor(x)
+}
+
+const round = (n: number, d: number) => Number(n.toFixed(d))
+
+const particles = Array.from({ length: 20 }, (_, i) => ({
+  x: `${round(5 + rng(i * 137) * 90, 2)}%`,
+  y: `${round(10 + rng(i * 281) * 75, 2)}%`,
+  delay: i * 0.3,
+  size: round(1.5 + rng(i * 73) * 5, 2),
+  duration: round(5 + rng(i * 199) * 5, 2),
+  yOffset: round(-30 - rng(i * 311) * 30, 2),
+  repeatDelay: round(0.5 + rng(i * 157) * 2, 2),
+}))
+
+const textVariants = {
+  hidden: { opacity: 0, y: 60 },
+  visible: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: { delay: 0.3 + i * 0.15, duration: 0.9, ease: [0.25, 0.46, 0.45, 0.94] as const },
+  }),
+}
+
+const letterVariants = {
+  hidden: { opacity: 0, y: 80, rotateX: -40 },
+  visible: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    rotateX: 0,
+    transition: { delay: i * 0.04, duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] as const },
+  }),
+}
+
+const titleText = 'Define Your'
+const subtitleText = 'Signature'
+
+const HERO_IMAGE = 'https://images.pexels.com/photos/11577068/pexels-photo-11577068.jpeg'
 
 export function HeroSection() {
-  const sectionRef = useRef<HTMLElement>(null)
+  const ref = useRef<HTMLDivElement>(null)
   const { scrollYProgress } = useScroll({
-    target: sectionRef,
+    target: ref,
     offset: ['start start', 'end start'],
   })
 
-  const imageY = useTransform(scrollYProgress, [0, 1], [0, 25])
-  const textY = useTransform(scrollYProgress, [0, 1], [0, 8])
-  const opacity = useTransform(scrollYProgress, [0, 0.4], [1, 0])
+  const imageY = useTransform(scrollYProgress, [0, 1], ['0%', '30%'])
+  const contentY = useTransform(scrollYProgress, [0, 1], ['0%', '20%'])
+  const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0])
 
   return (
-    <motion.section
-      ref={sectionRef}
-      className="relative min-h-[100dvh] sm:min-h-[90dvh] lg:min-h-[90dvh] flex items-center overflow-hidden hero-gradient"
-    >
-      {/* Mobile gold accent glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-br from-kartel-gold/8 via-kartel-gold/3 to-transparent rounded-full blur-[120px] pointer-events-none lg:hidden" />
-      <div className="absolute top-[-10%] right-[-10%] w-[600px] h-[600px] bg-gradient-to-br from-kartel-gold/10 via-kartel-gold/3 to-transparent rounded-full blur-[150px] pointer-events-none" />
-      <div className="absolute bottom-0 left-[-20%] w-[500px] h-[500px] bg-gradient-to-tr from-kartel-gold/6 via-kartel-gold/2 to-transparent rounded-full blur-[120px] pointer-events-none" />
+    <section ref={ref} className="relative h-screen min-h-[680px] max-h-[1080px] overflow-hidden bg-kartel-black">
+      {/* Desktop: image covers right portion */}
+      <div className="hidden lg:block absolute inset-0 z-0">
+        <motion.div style={{ y: imageY }} className="absolute inset-0 lg:left-[42%] xl:left-[45%] 2xl:left-[48%]">
+          <div className="absolute inset-0 bg-gradient-to-l from-transparent via-kartel-black/40 to-kartel-black z-10" />
+          <div
+            className="w-full h-full bg-cover bg-center"
+            style={{ backgroundImage: `url(${HERO_IMAGE})` }}
+          />
+        </motion.div>
+      </div>
 
-      {/* Decorative gold line - top */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[200px] lg:w-[400px] h-px bg-gradient-to-r from-transparent via-kartel-gold/30 to-transparent z-10" />
+      {/* Mobile: image is full background, NO overlay */}
+      <div className="lg:hidden absolute inset-0 z-0">
+        <motion.div style={{ y: imageY }} className="absolute inset-0">
+          <div
+            className="w-full h-full bg-cover bg-center"
+            style={{ backgroundImage: `url(${HERO_IMAGE})` }}
+          />
+        </motion.div>
+      </div>
 
-      {/* Main container */}
-      <div className="container-luxury w-full relative z-10 pt-24 lg:pt-0">
-        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8 lg:gap-16 w-full">
+      {/* Gold glow accents */}
+      <div className="absolute top-1/4 left-[15%] w-72 h-72 rounded-full bg-kartel-gold/3 blur-3xl animate-pulse-glow pointer-events-none z-10" />
+      <div className="absolute bottom-1/4 right-[20%] w-48 h-48 rounded-full bg-kartel-gold/3 blur-3xl animate-pulse-glow pointer-events-none z-10" style={{ animationDelay: '1.5s' }} />
+      <div className="absolute top-1/3 left-[45%] w-32 h-32 rounded-full bg-kartel-gold/2 blur-3xl animate-pulse-glow pointer-events-none z-10" style={{ animationDelay: '3s' }} />
 
-          {/* LEFT: Content */}
-          <motion.div
-            style={{ y: textY, opacity }}
-            className="flex flex-col justify-center space-y-6 lg:space-y-6 flex-1 lg:flex-none lg:w-[52%] order-1"
-          >
-            {/* Premium badge */}
+      {/* Gold top/bottom borders */}
+      <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-kartel-gold/15 to-transparent z-20" />
+      <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-kartel-gold/15 to-transparent z-20" />
+
+      {/* Floating particles */}
+      {particles.map((p, i) => (
+        <motion.div
+          key={i}
+          className="absolute z-10 rounded-full pointer-events-none"
+          style={{
+            left: p.x,
+            top: p.y,
+            width: `${p.size}px`,
+            height: `${p.size}px`,
+            background: 'rgba(201,168,76,0.35)',
+            boxShadow: '0 0 10px rgba(201,168,76,0.25)',
+          }}
+          initial={{ opacity: 0, scale: 0 }}
+          animate={{
+            opacity: [0, 0.5, 0],
+            scale: [0, 1, 0],
+            y: [0, p.yOffset],
+          }}
+          transition={{
+            duration: p.duration,
+            delay: p.delay,
+            repeat: Infinity,
+            repeatDelay: p.repeatDelay,
+            ease: 'easeInOut',
+          }}
+        />
+      ))}
+
+      {/* Content */}
+      <motion.div
+        style={{ opacity }}
+        className="relative z-20 flex items-center h-full px-6 lg:px-12 xl:px-20 2xl:px-28"
+      >
+        <div className="w-full lg:w-[55%] xl:w-[52%]">
+          <div className="max-w-2xl">
+            {/* Badge */}
             <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-              className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-kartel-gold/12 border border-kartel-gold/25 backdrop-blur-md w-fit shadow-lg shadow-kartel-gold/5"
+              custom={0}
+              variants={textVariants}
+              initial="hidden"
+              animate="visible"
+              className="flex items-center gap-4 mb-10"
             >
-              <Sparkles className="w-3.5 h-3.5 text-kartel-gold" strokeWidth={1.5} />
-              <span className="text-[10px] font-semibold tracking-[0.2em] uppercase text-kartel-gold">
+              <span className="w-12 h-px bg-kartel-gold-light/30" />
+              <span className="text-kartel-gold-light/60 tracking-[0.35em] text-xs uppercase font-light">
                 Haute Parfumerie
               </span>
             </motion.div>
 
-            {/* Main headline */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
-              className="space-y-2"
-            >
-              <h1 className="font-serif text-[clamp(2.25rem,7vw,3.5rem)] font-bold text-heading leading-[1.05] tracking-[-0.02em] text-balance">
-                Define Your{' '}
-                <span className="italic font-light bg-gradient-to-r from-kartel-gold via-kartel-gold-light to-kartel-gold-dark bg-clip-text text-transparent">
-                  Invisible
+            {/* Animated title */}
+            <motion.div style={{ y: contentY }} className="perspective-1000 mb-8">
+              <h1 className="text-5xl sm:text-7xl md:text-8xl lg:text-6xl xl:text-7xl 2xl:text-8xl font-serif text-white leading-[0.85] tracking-tight">
+                <span className="flex gap-2 sm:gap-4 flex-wrap">
+                  {titleText.split('').map((char, i) => (
+                    <motion.span
+                      key={i}
+                      custom={i}
+                      variants={letterVariants}
+                      initial="hidden"
+                      animate="visible"
+                      className="inline-block"
+                      style={{ textShadow: '0 2px 40px rgba(0,0,0,0.3)' }}
+                    >
+                      {char === ' ' ? '\u00A0' : char}
+                    </motion.span>
+                  ))}
+                </span>
+                <br />
+                <span className="flex gap-2 sm:gap-4 flex-wrap">
+                  {subtitleText.split('').map((char, i) => (
+                    <motion.span
+                      key={i}
+                      custom={i + titleText.length}
+                      variants={letterVariants}
+                      initial="hidden"
+                      animate="visible"
+                      className="inline-block shimmer-text"
+                      style={{ textShadow: '0 2px 40px rgba(0,0,0,0.3)' }}
+                    >
+                      {char === ' ' ? '\u00A0' : char}
+                    </motion.span>
+                  ))}
                 </span>
               </h1>
-              <h1 className="font-serif text-[clamp(1.75rem,5vw,3rem)] font-bold text-heading leading-[1.1] tracking-[-0.02em]">
-                Signature
-              </h1>
             </motion.div>
+
+            {/* Divider */}
+            <motion.div
+              initial={{ scaleX: 0 }}
+              animate={{ scaleX: 1 }}
+              transition={{ delay: 1.2, duration: 1.2, ease: [0.25, 0.46, 0.45, 0.94] }}
+              className="w-20 h-px bg-gradient-to-r from-kartel-gold/60 to-transparent origin-left mb-8"
+            />
 
             {/* Description */}
             <motion.p
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-              className="text-[clamp(0.9375rem,2.5vw,1.125rem)] text-body max-w-xl leading-[1.8]"
+              custom={1}
+              variants={textVariants}
+              initial="hidden"
+              animate="visible"
+              className="text-white/45 text-sm sm:text-base md:text-lg max-w-lg mb-12 font-light leading-relaxed tracking-wide"
             >
-              CARL JONES blends rare botanicals with avant-garde chemistry. Each scent
-              transcends time—a symphony of luxury for the discerning few.
+              CARL JONES blends rare botanicals with avant-garde chemistry.
+              Each scent transcends time — a symphony of luxury for the discerning few.
             </motion.p>
 
-            {/* CTAs - full width buttons on mobile */}
+            {/* CTA buttons */}
             <motion.div
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
-              className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4"
+              custom={2}
+              variants={textVariants}
+              initial="hidden"
+              animate="visible"
+              className="flex flex-col sm:flex-row gap-4"
             >
-              <Link
+              <motion.a
                 href="/shop"
-                className="group relative inline-flex items-center justify-center gap-2.5 text-sm px-8 py-4 bg-gradient-to-r from-kartel-gold to-kartel-gold-light text-kartel-black font-semibold rounded-full shadow-lg shadow-kartel-gold/20 hover:shadow-xl hover:shadow-kartel-gold/30 transition-all duration-500 overflow-hidden"
+                whileHover={{ scale: 1.03, y: -3 }}
+                whileTap={{ scale: 0.97 }}
+                className="group relative px-10 py-4 bg-gradient-to-r from-kartel-gold-dark via-kartel-gold to-kartel-gold-light text-white text-xs tracking-[0.25em] uppercase font-medium rounded-xl overflow-hidden"
               >
-                <span className="relative z-10">Shop Collection</span>
-                <ArrowRight
-                  className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1.5 relative z-10"
-                  strokeWidth={2.5}
-                />
-                <div className="absolute inset-0 bg-white/20 translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-700" />
-              </Link>
-              <Link
+                <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/15 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
+                <span className="relative flex items-center gap-2">
+                  Shop Collection
+                  <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M5 12h14M12 5l7 7-7 7" />
+                  </svg>
+                </span>
+              </motion.a>
+              <motion.a
                 href="/about"
-                className="inline-flex items-center justify-center text-sm px-8 py-4 border border-black/20 text-black/70 rounded-full bg-transparent hover:bg-black/[0.05] hover:border-black/30 transition-all duration-300"
+                whileHover={{ scale: 1.03, y: -3 }}
+                whileTap={{ scale: 0.97 }}
+                className="px-10 py-4 border border-white/15 text-white/70 text-xs tracking-[0.25em] uppercase font-medium rounded-xl hover:border-kartel-gold/40 hover:text-kartel-gold hover:bg-kartel-gold/5 transition-all duration-500"
               >
                 Our Heritage
-              </Link>
+              </motion.a>
             </motion.div>
-
-            {/* Stats - always visible on mobile */}
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.55, ease: [0.16, 1, 0.3, 1] }}
-              className="flex items-center gap-4 pt-4"
-            >
-              <div className="h-px flex-1 bg-gradient-to-r from-transparent via-black/[0.08] to-transparent" />
-              <div className="flex gap-6 lg:gap-12">
-                {[
-                  { value: '200+', label: 'Scents' },
-                  { value: '50K+', label: 'Clients' },
-                  { value: '4.9', label: 'Rating' },
-                ].map((stat) => (
-                  <div key={stat.label} className="text-center">
-                    <p className="text-lg lg:text-xl font-serif font-bold text-heading">{stat.value}</p>
-                    <p className="text-[9px] uppercase tracking-[0.2em] text-muted mt-1">{stat.label}</p>
-                  </div>
-                ))}
-              </div>
-              <div className="h-px flex-1 bg-gradient-to-r from-black/[0.08] to-transparent" />
-            </motion.div>
-          </motion.div>
-
-          {/* RIGHT: Hero Image - hidden on mobile, shown on lg+ */}
-          <motion.div
-            style={{ y: imageY }}
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-            className="relative hidden lg:flex justify-center lg:justify-end items-center order-2 mt-8 lg:mt-0"
-          >
-            <div className="absolute inset-0 -m-32 bg-gradient-to-br from-kartel-gold/10 via-kartel-gold/6 to-kartel-gold/10 blur-[100px] rounded-full" />
-
-            <div className="relative z-10">
-              <div className="relative w-[360px] h-[450px]">
-                <div className="relative w-full h-full rounded-[2rem] overflow-hidden shadow-2xl">
-                  <Image
-                    src="https://images.unsplash.com/photo-1622618991746-fe6004db3a47?w=600&auto=format&fit=crop&q=60"
-                    alt="CARL JONES Signature Perfume"
-                    fill
-                    className="object-cover object-center"
-                    priority
-                    sizes="360px"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
-                  <div className="absolute top-5 left-5 px-3.5 py-2 rounded-xl bg-black/60 backdrop-blur-md border border-kartel-gold/20">
-                    <p className="text-[10px] uppercase tracking-[0.15em] text-kartel-gold font-semibold">Signature</p>
-                    <p className="font-serif text-white text-xs mt-0.5">Collection</p>
-                  </div>
-                  <div className="absolute bottom-4 right-4 flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/70 backdrop-blur-md border border-kartel-gold/30">
-                    <Star className="w-3.5 h-3.5 text-amber-400 fill-amber-400" strokeWidth={0} />
-                    <span className="text-sm font-bold text-white">4.9</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </motion.div>
+          </div>
         </div>
-      </div>
+      </motion.div>
 
-      {/* Bottom gradient - subtle fade on mobile */}
-      <div className="absolute bottom-0 left-0 right-0 h-32 lg:h-24 bg-gradient-to-t from-white/60 via-white/20 to-transparent lg:from-transparent lg:via-transparent lg:to-transparent pointer-events-none" />
-
-      {/* Decorative corner dots */}
-      <div className="absolute bottom-8 left-8 w-2 h-2 rounded-full bg-kartel-gold/20 hidden sm:block" />
-      <div className="absolute bottom-8 right-8 w-2 h-2 rounded-full bg-kartel-gold/20 hidden sm:block" />
-
-      {/* Scroll indicator - more visible on mobile */}
+      {/* Scroll indicator */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 2, duration: 1 }}
-        className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3"
+        transition={{ delay: 2.5, duration: 1 }}
+        className="absolute bottom-10 left-1/2 -translate-x-1/2 z-20"
       >
-        <span className="text-[9px] uppercase tracking-[0.3em] text-muted">Scroll</span>
         <motion.div
-          animate={{ y: [0, 6, 0] }}
-          transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-          className="w-px h-8 bg-gradient-to-b from-kartel-gold/50 to-transparent"
-        />
+          animate={{ y: [0, 10, 0] }}
+          transition={{ repeat: Infinity, duration: 2.5, ease: 'easeInOut' }}
+          className="flex flex-col items-center gap-3"
+        >
+          <span className="text-[9px] text-white/15 tracking-[0.4em] uppercase">Scroll</span>
+          <div className="w-5 h-8 border border-white/10 rounded-full flex items-start justify-center p-1">
+            <motion.div
+              animate={{ y: [0, 10, 0] }}
+              transition={{ repeat: Infinity, duration: 2, ease: 'easeInOut' }}
+              className="w-1 h-2 rounded-full bg-kartel-gold"
+            />
+          </div>
+        </motion.div>
       </motion.div>
-
-      {/* Gold shine accent */}
-      <div className="absolute top-1/4 right-[15%] w-[2px] h-16 bg-gradient-to-b from-transparent via-kartel-gold/30 to-transparent hidden sm:block" />
-    </motion.section>
+    </section>
   )
 }

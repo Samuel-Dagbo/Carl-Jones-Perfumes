@@ -755,3 +755,26 @@ img[data-loading="true"] {
 .light-mode-admin .text-black\/50 {
   color: rgba(0, 0, 0, 0.60) !important;
 }
+
+/* --- Hero utilities --- */
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+.shimmer-text {
+  background: linear-gradient(90deg, #e8d5a3 0%, #c9a84c 25%, #f0e6c5 50%, #c9a84c 75%, #e8d5a3 100%);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 3s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.3; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(1.05); }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 4s ease-in-out infinite;
+}
