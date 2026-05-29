@@ -224,7 +224,7 @@ export function HeroSection() {
               src={HERO_IMAGE}
               alt="Carl Jones Signature Perfume"
               fill
-              className="object-cover object-center"
+              className="object-contain object-center"
               priority
             />
           </motion.div>
