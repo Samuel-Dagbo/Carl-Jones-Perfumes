@@ -30,7 +30,7 @@ const testimonials = [
     name: 'Seraphina Lee',
     title: 'Fashion Stylist',
     quote:
-      "As a stylist, I appreciate attention to detail, and Carl Jones delivers. 'Celestial Mist' has become my signature scent—subtle yet powerful. The sleek design of the bottle itself is a work of art.",
+      "As a stylist, I appreciate attention to detail, and Carl Jones delivers. 'Celestial Mist' has become my signature scent — subtle yet powerful. The sleek design of the bottle itself is a work of art.",
     avatar:
       'https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=1976&auto=format&fit=crop',
     rating: 4,
@@ -39,13 +39,9 @@ const testimonials = [
 
 export function Testimonials() {
   return (
-    <section className="section-padding bg-secondary relative overflow-hidden">
-      {/* Ambient glow */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-kartel-gold/[0.02] blur-[150px] rounded-full pointer-events-none" />
-      <div className="absolute bottom-0 right-[-10%] w-[400px] h-[400px] bg-kartel-gold/[0.012] blur-[120px] rounded-full pointer-events-none" />
-
+    <section className="section-padding relative overflow-hidden bg-white">
       {/* Top divider */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[400px] h-px bg-gradient-to-r from-transparent via-kartel-gold/15 to-transparent" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[400px] h-px bg-gradient-to-r from-transparent via-[#C9A84C]/15 to-transparent" />
 
       <div className="container-luxury relative">
         <motion.div
@@ -55,45 +51,44 @@ export function Testimonials() {
           transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
           className="text-center mb-14 md:mb-20"
         >
-          <span className="inline-block text-[11px] font-semibold tracking-[0.25em] uppercase text-kartel-gold/70 mb-6 px-5 py-2 border border-kartel-gold/[0.12] rounded-full backdrop-blur-sm">
+          <span className="inline-block text-[10px] sm:text-[11px] font-semibold tracking-[0.25em] uppercase text-[#C9A84C]/70 mb-4 sm:mb-6 px-4 sm:px-5 py-2 border border-[#C9A84C]/[0.12] rounded-full">
             Testimonials
           </span>
-          <h2 className="font-serif text-display-md font-bold text-heading leading-[1.05] tracking-[-0.02em]">
-            What Our <span className="text-gradient">Clients Say</span>
+          <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-[#1a1210] leading-[1.05] tracking-[-0.02em]">
+            What Our <span className="bg-gradient-to-r from-[#C9A84C] via-[#E8D5A3] to-[#C9A84C] bg-clip-text text-transparent">Clients Say</span>
           </h2>
-          <p className="mt-5 text-base sm:text-lg text-body max-w-lg mx-auto leading-relaxed">
+          <p className="mt-3 sm:mt-5 text-sm sm:text-base text-[#4a3f35]/60 max-w-lg mx-auto leading-relaxed">
             Real experiences from our valued customers around the world.
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7 lg:gap-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
           {testimonials.map((testimonial, index) => (
             <motion.div
               key={testimonial.id}
-              initial={{ opacity: 0, y: 50 }}
+              initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.2 }}
               transition={{
-                duration: 0.9,
-                delay: index * 0.15,
+                duration: 0.8,
+                delay: index * 0.12,
                 ease: [0.16, 1, 0.3, 1],
               }}
             >
-              <div className="relative glass-card rounded-[2rem] p-8 lg:p-10 h-full border hover:border-kartel-gold/[0.08] transition-all duration-700 group">
-                {/* Quote icon with glow */}
-                <div className="relative mb-8">
-                  <div className="absolute -top-2 -left-2 w-14 h-14 bg-kartel-gold/[0.04] rounded-full blur-xl" />
-                  <Quote className="w-9 h-9 text-kartel-gold/25 relative z-10" strokeWidth={1} />
+              <div className="relative rounded-2xl p-7 lg:p-8 h-full border border-black/[0.06] hover:border-[#C9A84C]/15 transition-all duration-400 bg-white">
+                {/* Quote icon */}
+                <div className="mb-6">
+                  <Quote className="w-8 h-8 text-[#C9A84C]/20" strokeWidth={1} />
                 </div>
 
                 {/* Stars */}
-                <div className="flex gap-1.5 mb-6">
+                <div className="flex gap-1 mb-5">
                   {Array.from({ length: 5 }).map((_, i) => (
                     <Star
                       key={i}
                       className={`w-3.5 h-3.5 ${
                         i < testimonial.rating
-                          ? 'text-kartel-gold fill-kartel-gold'
+                          ? 'text-[#C9A84C] fill-[#C9A84C]'
                           : 'text-black/10'
                       }`}
                     />
@@ -101,36 +96,29 @@ export function Testimonials() {
                 </div>
 
                 {/* Quote text */}
-                <p className="text-base sm:text-lg text-body leading-[1.85] flex-1 mb-10 group-hover:text-body transition-colors duration-500">
+                <p className="text-sm sm:text-base text-[#4a3f35]/70 leading-[1.8] flex-1 mb-8">
                   &ldquo;{testimonial.quote}&rdquo;
                 </p>
 
                 {/* Author */}
-                <div className="flex items-center gap-4 pt-6 border-t border-black/[0.06] dark:border-white/[0.06]">
-                  <div className="relative w-14 h-14 rounded-full overflow-hidden ring-2 ring-kartel-gold/[0.1] group-hover:ring-kartel-gold/[0.25] transition-all duration-500">
+                <div className="flex items-center gap-3 pt-5 border-t border-black/[0.06]">
+                  <div className="relative w-11 h-11 rounded-full overflow-hidden ring-1 ring-black/[0.06]">
                     <Image
                       src={testimonial.avatar}
                       alt={testimonial.name}
                       fill
-                      sizes="56px"
+                      sizes="44px"
                       className="object-cover"
                     />
-                    {/* Avatar glow */}
-                    <div className="absolute inset-0 bg-kartel-gold/[0.08] opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                   </div>
                   <div>
-                    <h3 className="font-serif text-base font-semibold text-heading group-hover:text-kartel-gold transition-colors duration-500">
+                    <h3 className="text-sm font-semibold text-[#1a1210]">
                       {testimonial.name}
                     </h3>
-                    <p className="text-[11px] text-muted mt-1 tracking-wide">
+                    <p className="text-[11px] text-[#4a3f35]/50 mt-0.5 tracking-wide">
                       {testimonial.title}
                     </p>
                   </div>
-                </div>
-
-                {/* Decorative corner element */}
-                <div className="absolute top-8 right-8 w-10 h-10 rounded-full border border-kartel-gold/[0.06] flex items-center justify-center">
-                  <div className="w-2 h-2 rounded-full bg-kartel-gold/[0.15]" />
                 </div>
               </div>
             </motion.div>

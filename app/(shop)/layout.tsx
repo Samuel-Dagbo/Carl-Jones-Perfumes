@@ -13,10 +13,7 @@ export default function ShopLayout({ children }: { children: React.ReactNode }) 
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.4 }}
-      className="min-h-screen transition-colors duration-300"
-      style={{
-        paddingTop: '4.5rem',
-      }}
+      className="min-h-screen transition-colors duration-300 pt-[4.5rem] lg:pt-24"
     >
       <div
         className={`min-h-screen transition-colors duration-300 ${

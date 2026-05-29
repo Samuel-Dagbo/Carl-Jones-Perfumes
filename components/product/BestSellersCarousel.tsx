@@ -3,7 +3,7 @@
 import { motion, AnimatePresence } from 'framer-motion'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useState, useEffect, useCallback, useRef } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { Star, ChevronLeft, ChevronRight, ShoppingBag } from 'lucide-react'
 import { useCart } from '@/components/providers/CartProvider'
 import { useTheme } from '@/components/providers/ThemeProvider'
@@ -67,14 +67,10 @@ export default function BestSellersCarousel({ products = [] }: BestSellersCarous
 
   return (
     <section className={`section-padding relative overflow-hidden transition-colors duration-300 ${
-        isDark ? 'bg-secondary' : 'bg-kartel-white-50'
+        isDark ? 'bg-[#141414]' : 'bg-[#fafafa]'
       }`}>
-      {/* Ambient glow effects */}
-      <div className="absolute top-1/2 left-[-10%] w-[500px] h-[500px] bg-kartel-gold/[0.02] rounded-full blur-[150px] pointer-events-none" />
-      <div className="absolute top-1/3 right-[-5%] w-[400px] h-[400px] bg-kartel-gold/[0.015] rounded-full blur-[120px] pointer-events-none" />
-
       {/* Top divider */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[400px] h-px bg-gradient-to-r from-transparent via-kartel-gold/15 to-transparent" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[400px] h-px bg-gradient-to-r from-transparent via-[#C9A84C]/15 to-transparent" />
 
       <div className="container-luxury relative">
         <motion.div
@@ -84,13 +80,13 @@ export default function BestSellersCarousel({ products = [] }: BestSellersCarous
           transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
           className="text-center mb-10 md:mb-16"
         >
-          <span className="inline-block text-[10px] sm:text-[11px] font-semibold tracking-[0.25em] uppercase text-kartel-gold/70 mb-4 sm:mb-6 px-4 sm:px-5 py-2 border border-kartel-gold/[0.12] rounded-full backdrop-blur-sm">
+          <span className="inline-block text-[10px] sm:text-[11px] font-semibold tracking-[0.25em] uppercase text-[#C9A84C]/70 mb-4 sm:mb-6 px-4 sm:px-5 py-2 border border-[#C9A84C]/[0.12] rounded-full">
             Most Loved
           </span>
-          <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-heading leading-[1.05] tracking-[-0.02em]">
-            Best <span className="text-gradient">Sellers</span>
+          <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-[#1a1210] leading-[1.05] tracking-[-0.02em]">
+            Best <span className="bg-gradient-to-r from-[#C9A84C] via-[#E8D5A3] to-[#C9A84C] bg-clip-text text-transparent">Sellers</span>
           </h2>
-          <p className="mt-3 sm:mt-5 text-sm sm:text-base text-muted max-w-lg mx-auto leading-relaxed">
+          <p className="mt-3 sm:mt-5 text-sm sm:text-base text-[#4a3f35]/60 max-w-lg mx-auto leading-relaxed">
             Our customers&apos; favorite fragrances, curated for you.
           </p>
         </motion.div>
@@ -114,10 +110,10 @@ export default function BestSellersCarousel({ products = [] }: BestSellersCarous
                 className="space-y-5 sm:space-y-7"
               >
                 <div>
-                  <span className="text-[10px] sm:text-[11px] font-semibold tracking-[0.2em] uppercase text-kartel-gold/60">
+                  <span className="text-[10px] sm:text-[11px] font-semibold tracking-[0.2em] uppercase text-[#C9A84C]/60">
                     {product.brand || 'CARL JONES'}
                   </span>
-                  <h3 className="font-serif text-2xl sm:text-3xl lg:text-[2.75rem] font-bold text-heading mt-2 sm:mt-3 leading-[1.15] text-balance">
+                  <h3 className="font-serif text-2xl sm:text-3xl lg:text-[2.75rem] font-bold text-[#1a1210] mt-2 sm:mt-3 leading-[1.15]">
                     {product.name}
                   </h3>
                   <div className="flex items-center gap-2 sm:gap-3 mt-3 sm:mt-5">
@@ -127,35 +123,33 @@ export default function BestSellersCarousel({ products = [] }: BestSellersCarous
                           key={i}
                           className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${
                             i < rating
-                              ? 'text-kartel-gold fill-kartel-gold'
-                              : isDark ? 'text-white/30' : 'text-black/30'
+                              ? 'text-[#C9A84C] fill-[#C9A84C]'
+                              : isDark ? 'text-white/20' : 'text-black/15'
                           }`}
                         />
                       ))}
                     </div>
-                    <span className={`text-xs sm:text-sm ${
-                      isDark ? 'text-white/60' : 'text-black/60'
-                    }`}>
+                    <span className={`text-xs sm:text-sm ${isDark ? 'text-white/50' : 'text-black/50'}`}>
                       {product.rating} ({product.reviewCount || 0})
                     </span>
                   </div>
                 </div>
 
                 <p className={`text-sm sm:text-base leading-[1.7] sm:leading-[1.8] line-clamp-2 sm:line-clamp-none max-w-md ${
-                  isDark ? 'text-white/70' : 'text-black/70'
+                  isDark ? 'text-white/60' : 'text-[#4a3f35]/70'
                 }`}>
                   {product.description}
                 </p>
 
                 <div className="flex items-baseline gap-3 sm:gap-4">
                   <span className={`text-2xl sm:text-3xl font-bold tracking-tight ${
-                    isDark ? 'text-white' : 'text-kartel-black-900'
+                    isDark ? 'text-white' : 'text-[#1a1210]'
                   }`}>
                     {formatPrice(product.price)}
                   </span>
                   {product.comparePrice && (
                     <span className={`text-base sm:text-lg line-through ${
-                      isDark ? 'text-white/25' : 'text-black/40'
+                      isDark ? 'text-white/20' : 'text-black/30'
                     }`}>
                       {formatPrice(product.comparePrice)}
                     </span>
@@ -165,17 +159,17 @@ export default function BestSellersCarousel({ products = [] }: BestSellersCarous
                 <div className="flex flex-wrap gap-3 sm:gap-4 pt-1 sm:pt-2">
                   <Link
                     href={`/product/${product.slug || product._id}`}
-                    className="group relative inline-flex items-center gap-2 bg-kartel-black text-white text-xs sm:text-sm font-semibold px-5 sm:px-7 py-2.5 sm:py-3.5 rounded-full overflow-hidden shadow-lg hover:shadow-xl transition-all duration-500"
+                    className="group relative inline-flex items-center gap-2 bg-[#1a1210] text-white text-xs sm:text-sm font-semibold px-5 sm:px-7 py-2.5 sm:py-3.5 rounded-full overflow-hidden shadow-lg hover:shadow-xl transition-all duration-500"
                   >
                     <span className="relative z-10">View Details</span>
-                    <div className="absolute inset-0 bg-kartel-black-900 translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-500" />
+                    <div className="absolute inset-0 bg-[#0a0a0a] translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-500" />
                   </Link>
                   <button
                     onClick={handleAddToCart}
                     className={`group inline-flex items-center gap-2 border text-xs sm:text-sm font-medium px-5 sm:px-7 py-2.5 sm:py-3.5 rounded-full transition-all duration-300 ${
                       isDark
-                        ? 'bg-white/[0.05] hover:bg-kartel-gold/[0.08] border-white/[0.08] hover:border-kartel-gold/25 text-white/80 hover:text-kartel-gold'
-                        : 'bg-black/[0.02] hover:bg-kartel-gold/[0.08] border-black/[0.08] hover:border-kartel-gold/25 text-black/70 hover:text-kartel-gold'
+                        ? 'bg-white/[0.04] hover:bg-[#C9A84C]/[0.08] border-white/[0.08] hover:border-[#C9A84C]/25 text-white/70 hover:text-[#C9A84C]'
+                        : 'bg-black/[0.02] hover:bg-[#C9A84C]/[0.08] border-black/[0.08] hover:border-[#C9A84C]/25 text-[#1a1210]/60 hover:text-[#C9A84C]'
                     }`}
                   >
                     <ShoppingBag className="w-4 h-4 transition-transform group-hover:scale-110" strokeWidth={2} />
@@ -191,8 +185,8 @@ export default function BestSellersCarousel({ products = [] }: BestSellersCarous
                 onClick={handlePrev}
                 className={`group p-3.5 rounded-full border transition-all duration-300 ${
                   isDark
-                    ? 'bg-white/[0.04] border-white/[0.08] hover:bg-kartel-gold/[0.08] hover:border-kartel-gold/25 text-white/40 hover:text-kartel-gold'
-                    : 'bg-black/[0.02] border-black/[0.08] hover:bg-kartel-gold/[0.08] hover:border-kartel-gold/25 text-black/40 hover:text-kartel-gold'
+                    ? 'bg-white/[0.04] border-white/[0.08] hover:bg-[#C9A84C]/[0.08] hover:border-[#C9A84C]/25 text-white/30 hover:text-[#C9A84C]'
+                    : 'bg-black/[0.02] border-black/[0.08] hover:bg-[#C9A84C]/[0.08] hover:border-[#C9A84C]/25 text-black/30 hover:text-[#C9A84C]'
                 }`}
                 aria-label="Previous"
               >
@@ -202,8 +196,8 @@ export default function BestSellersCarousel({ products = [] }: BestSellersCarous
                 onClick={handleNext}
                 className={`group p-3.5 rounded-full border transition-all duration-300 ${
                   isDark
-                    ? 'bg-white/[0.04] border-white/[0.08] hover:bg-kartel-gold/[0.08] hover:border-kartel-gold/25 text-white/40 hover:text-kartel-gold'
-                    : 'bg-black/[0.02] border-black/[0.08] hover:bg-kartel-gold/[0.08] hover:border-kartel-gold/25 text-black/40 hover:text-kartel-gold'
+                    ? 'bg-white/[0.04] border-white/[0.08] hover:bg-[#C9A84C]/[0.08] hover:border-[#C9A84C]/25 text-white/30 hover:text-[#C9A84C]'
+                    : 'bg-black/[0.02] border-black/[0.08] hover:bg-[#C9A84C]/[0.08] hover:border-[#C9A84C]/25 text-black/30 hover:text-[#C9A84C]'
                 }`}
                 aria-label="Next"
               >
@@ -217,10 +211,10 @@ export default function BestSellersCarousel({ products = [] }: BestSellersCarous
                       setDirection(idx > current ? 1 : -1)
                       setCurrent(idx)
                     }}
-                    className={`h-1.5 rounded-full transition-all duration-700 ${
+                    className={`h-1.5 rounded-full transition-all duration-500 ${
                       idx === current
-                        ? 'w-10 bg-kartel-gold'
-                        : `w-2 ${isDark ? 'bg-white/10 hover:bg-white/25' : 'bg-black/10 hover:bg-black/25'}`
+                        ? 'w-10 bg-[#C9A84C]'
+                        : `w-2 ${isDark ? 'bg-white/10 hover:bg-white/20' : 'bg-black/10 hover:bg-black/20'}`
                     }`}
                     aria-label={`Go to slide ${idx + 1}`}
                   />
@@ -240,15 +234,11 @@ export default function BestSellersCarousel({ products = [] }: BestSellersCarous
                 transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
                 className="relative aspect-[4/5] max-w-md mx-auto lg:max-w-lg"
               >
-                {/* Background glow */}
-                <div className="absolute inset-0 -m-10 bg-kartel-gold/[0.04] rounded-full blur-[100px]" />
-                <div className="absolute inset-0 -m-6 bg-gradient-to-tr from-kartel-gold/[0.025] via-transparent to-kartel-gold/[0.015] rounded-full blur-[80px]" />
-
                 <div className="relative z-10 w-full h-full p-5 sm:p-8">
-                  <div className={`relative w-full h-full rounded-[2.5rem] overflow-hidden border shadow-luxury-xl ${
+                  <div className={`relative w-full h-full rounded-[2rem] overflow-hidden border ${
                     isDark
-                      ? 'border-white/[0.08] bg-gradient-to-b from-white/[0.04] to-transparent'
-                      : 'border-black/[0.08] bg-gradient-to-b from-black/[0.02] to-transparent'
+                      ? 'border-white/[0.06] bg-gradient-to-b from-white/[0.03] to-transparent'
+                      : 'border-black/[0.06] bg-gradient-to-b from-black/[0.02] to-transparent'
                   }`}>
                     <Image
                       src={
@@ -258,21 +248,18 @@ export default function BestSellersCarousel({ products = [] }: BestSellersCarous
                       alt={product.name}
                       fill
                       sizes="(max-width: 1024px) 100vw, 50vw"
-                      className="object-contain p-6 sm:p-8 drop-shadow-2xl"
+                      className="object-contain p-6 sm:p-8"
                       loading="lazy"
                       onError={(e) => { (e.target as HTMLImageElement).src = '/placeholder.svg' }}
                     />
 
-                    {/* Decorative elements */}
-                    <div className="absolute top-6 left-6 w-10 h-10 rounded-full border border-kartel-gold/[0.08] flex items-center justify-center">
-                      <div className="w-2.5 h-2.5 rounded-full bg-kartel-gold/25" />
-                    </div>
-                    <div className={`absolute top-6 right-6 px-4 py-2 rounded-full backdrop-blur-md border ${
+                    {/* Bestseller badge */}
+                    <div className={`absolute top-5 right-5 px-3.5 py-1.5 rounded-full backdrop-blur-md border ${
                       isDark
-                        ? 'bg-kartel-black/60 border-white/[0.08]'
-                        : 'bg-white/80 border-black/[0.08]'
+                        ? 'bg-[#141414]/60 border-white/[0.06]'
+                        : 'bg-white/80 border-black/[0.06]'
                     }`}>
-                      <span className="text-[10px] font-semibold tracking-wider uppercase text-kartel-gold/60">Bestseller</span>
+                      <span className="text-[10px] font-semibold tracking-wider uppercase text-[#C9A84C]/60">Bestseller</span>
                     </div>
                   </div>
                 </div>
@@ -285,8 +272,8 @@ export default function BestSellersCarousel({ products = [] }: BestSellersCarous
                 onClick={handlePrev}
                 className={`p-3.5 rounded-full border transition-all duration-300 ${
                   isDark
-                    ? 'bg-white/[0.03] border-white/[0.05] text-white/30 hover:text-kartel-gold hover:border-kartel-gold/25'
-                    : 'bg-black/[0.03] border-black/[0.06] text-black/40 hover:text-kartel-gold hover:border-kartel-gold/25'
+                    ? 'bg-white/[0.03] border-white/[0.05] text-white/25 hover:text-[#C9A84C] hover:border-[#C9A84C]/25'
+                    : 'bg-black/[0.03] border-black/[0.06] text-black/30 hover:text-[#C9A84C] hover:border-[#C9A84C]/25'
                 }`}
               >
                 <ChevronLeft className="w-5 h-5" strokeWidth={1.5} />
@@ -300,7 +287,7 @@ export default function BestSellersCarousel({ products = [] }: BestSellersCarous
                       setCurrent(idx)
                     }}
                     className={`h-1.5 rounded-full transition-all duration-500 ${
-                      idx === current ? 'w-8 bg-kartel-gold' : `w-2 ${isDark ? 'bg-white/10' : 'bg-black/10'}`
+                      idx === current ? 'w-8 bg-[#C9A84C]' : `w-2 ${isDark ? 'bg-white/10' : 'bg-black/10'}`
                     }`}
                   />
                 ))}
@@ -309,8 +296,8 @@ export default function BestSellersCarousel({ products = [] }: BestSellersCarous
                 onClick={handleNext}
                 className={`p-3.5 rounded-full border transition-all duration-300 ${
                   isDark
-                    ? 'bg-white/[0.03] border-white/[0.05] text-white/30 hover:text-kartel-gold hover:border-kartel-gold/25'
-                    : 'bg-black/[0.03] border-black/[0.06] text-black/40 hover:text-kartel-gold hover:border-kartel-gold/25'
+                    ? 'bg-white/[0.03] border-white/[0.05] text-white/25 hover:text-[#C9A84C] hover:border-[#C9A84C]/25'
+                    : 'bg-black/[0.03] border-black/[0.06] text-black/30 hover:text-[#C9A84C] hover:border-[#C9A84C]/25'
                 }`}
               >
                 <ChevronRight className="w-5 h-5" strokeWidth={1.5} />

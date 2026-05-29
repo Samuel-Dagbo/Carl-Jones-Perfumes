@@ -17,6 +17,10 @@ const nextConfig = {
       },
       {
         protocol: 'https',
+        hostname: 'images.pexels.com',
+      },
+      {
+        protocol: 'https',
         hostname: '**.googleusercontent.com',
       },
       {
@@ -61,7 +65,7 @@ const nextConfig = {
           {
             key: 'Content-Security-Policy',
             value: process.env.NODE_ENV === 'production'
-              ? "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://images.unsplash.com https://plus.unsplash.com https://res.cloudinary.com; font-src 'self'; connect-src 'self' https://api.paystack.co https://api.cloudinary.com; frame-src 'none'; object-src 'none'"
+              ? "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://images.unsplash.com https://plus.unsplash.com https://res.cloudinary.com https://images.pexels.com; font-src 'self'; connect-src 'self' https://api.paystack.co https://api.cloudinary.com; frame-src 'none'; object-src 'none'"
               : "",
           },
         ],

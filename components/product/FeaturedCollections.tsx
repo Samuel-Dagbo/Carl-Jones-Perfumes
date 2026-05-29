@@ -50,11 +50,8 @@ export function FeaturedCollections({ products = [] }: FeaturedCollectionsProps)
     : defaultCollections
 
   return (
-    <section className="section-padding bg-primary relative overflow-hidden">
-      <div className="absolute top-[20%] left-[-10%] w-[50%] h-[60%] bg-kartel-gold/[0.025] blur-[200px] rounded-full pointer-events-none" />
-      <div className="absolute bottom-[10%] right-[-5%] w-[40%] h-[50%] bg-kartel-gold/[0.015] blur-[180px] rounded-full pointer-events-none" />
-
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[400px] h-px bg-gradient-to-r from-transparent via-kartel-gold/15 to-transparent" />
+    <section className="section-padding relative overflow-hidden bg-white">
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[400px] h-px bg-gradient-to-r from-transparent via-[#C9A84C]/15 to-transparent" />
 
       <div className="container-luxury relative">
         <motion.div
@@ -64,77 +61,66 @@ export function FeaturedCollections({ products = [] }: FeaturedCollectionsProps)
           transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
           className="text-center mb-10 md:mb-16"
         >
-          <span className="inline-block text-[10px] sm:text-[11px] font-semibold tracking-[0.25em] uppercase text-kartel-gold/70 mb-4 sm:mb-6 px-4 sm:px-5 py-2 border border-kartel-gold/[0.12] rounded-full backdrop-blur-sm">
+          <span className="inline-block text-[10px] sm:text-[11px] font-semibold tracking-[0.25em] uppercase text-[#C9A84C]/70 mb-4 sm:mb-6 px-4 sm:px-5 py-2 border border-[#C9A84C]/[0.12] rounded-full">
             Curated For You
           </span>
-          <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-heading leading-[1.05] tracking-[-0.02em]">
-            Our <span className="text-gradient">Collections</span>
+          <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-[#1a1210] leading-[1.05] tracking-[-0.02em]">
+            Our <span className="bg-gradient-to-r from-[#C9A84C] via-[#E8D5A3] to-[#C9A84C] bg-clip-text text-transparent">Collections</span>
           </h2>
-          <p className="mt-3 sm:mt-5 text-sm sm:text-base text-muted max-w-lg mx-auto leading-relaxed">
+          <p className="mt-3 sm:mt-5 text-sm sm:text-base text-[#4a3f35]/60 max-w-lg mx-auto leading-relaxed">
             Handpicked selections to guide your olfactory journey through luxury.
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-10">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
           {collections.map((collection, index) => (
             <motion.div
               key={collection.id}
-              initial={{ opacity: 0, y: 50 }}
+              initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.2 }}
               transition={{
-                duration: 0.9,
-                delay: index * 0.15,
+                duration: 0.8,
+                delay: index * 0.12,
                 ease: [0.16, 1, 0.3, 1],
               }}
             >
               <Link href={collection.link} className="group block h-full">
-                <div className="relative h-full glass-card rounded-2xl sm:rounded-[2rem] overflow-hidden border hover:border-kartel-gold/[0.12] transition-all duration-700">
-                  <div className="relative h-64 sm:h-80 md:h-96 w-full overflow-hidden">
+                <div className="relative h-full rounded-2xl overflow-hidden border border-black/[0.06] hover:border-[#C9A84C]/20 transition-all duration-500 bg-white">
+                  <div className="relative h-72 sm:h-80 md:h-96 w-full overflow-hidden">
                     <Image
                       src={collection.image}
                       alt={collection.name}
                       fill
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                      className="object-cover scale-105 group-hover:scale-100 transition-transform duration-1000 ease-out brightness-90 group-hover:brightness-100"
+                      className="object-cover scale-105 group-hover:scale-100 transition-transform duration-1000 ease-out"
                       onError={(e) => { (e.target as HTMLImageElement).src = '/placeholder.svg' }}
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
-                    <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/50" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-transparent" />
 
-                    <div className="absolute top-6 left-6 px-4 py-2 rounded-full bg-black/60 backdrop-blur-xl border border-white/[0.08]">
-                      <span className="text-xs font-medium text-white/80">
+                    {/* Product count badge */}
+                    <div className="absolute top-5 left-5 px-3.5 py-1.5 rounded-full bg-black/50 backdrop-blur-md border border-white/[0.08]">
+                      <span className="text-[11px] font-medium text-white/80">
                         {collection.productCount} scent{collection.productCount !== 1 ? 's' : ''}
                       </span>
                     </div>
 
-                    <div className="absolute top-6 right-6 p-3 rounded-full bg-kartel-gold/15 backdrop-blur-xl opacity-0 group-hover:opacity-100 translate-y-3 group-hover:translate-y-0 transition-all duration-500 border border-kartel-gold/[0.15]">
-                      <ArrowUpRight className="w-4 h-4 text-kartel-gold" strokeWidth={1.5} />
-                    </div>
-
-                    <div className="absolute bottom-6 right-6 w-10 h-10 rounded-full border border-kartel-gold/[0.1] flex items-center justify-center">
-                      <div className="w-2.5 h-2.5 rounded-full bg-kartel-gold/30" />
+                    {/* Hover arrow */}
+                    <div className="absolute top-5 right-5 p-2.5 rounded-full bg-white/10 backdrop-blur-md opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-400 border border-white/10">
+                      <ArrowUpRight className="w-4 h-4 text-white" strokeWidth={1.5} />
                     </div>
                   </div>
 
-                  <div className="p-5 sm:p-6 lg:p-8 space-y-2 sm:space-y-3">
-                    <h3 className="font-serif text-lg sm:text-xl font-semibold text-heading group-hover:text-kartel-gold transition-colors duration-500">
+                  <div className="p-5 sm:p-6">
+                    <h3 className="font-serif text-lg sm:text-xl font-semibold text-[#1a1210] group-hover:text-[#C9A84C] transition-colors duration-400">
                       {collection.name}
                     </h3>
-                    <p className="text-xs sm:text-sm text-muted leading-relaxed line-clamp-2">
+                    <p className="text-xs sm:text-sm text-[#4a3f35]/60 leading-relaxed line-clamp-2 mt-2">
                       {collection.description}
                     </p>
-                    <div className="pt-2 sm:pt-3 flex items-center gap-2 text-kartel-gold/70 text-xs sm:text-sm font-medium tracking-wide group-hover:text-kartel-gold transition-colors duration-300">
+                    <div className="pt-3 flex items-center gap-1.5 text-[#C9A84C]/70 text-xs sm:text-sm font-medium tracking-wide group-hover:text-[#C9A84C] transition-colors duration-300">
                       <span>Explore Collection</span>
-                      <motion.div
-                        animate={{ x: [0, 4, 0] }}
-                        transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-                      >
-                        <ArrowUpRight
-                          className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1"
-                          strokeWidth={1.5}
-                        />
-                      </motion.div>
+                      <ArrowUpRight className="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" strokeWidth={1.5} />
                     </div>
                   </div>
                 </div>

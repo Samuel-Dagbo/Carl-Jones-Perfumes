@@ -1,4 +1,5 @@
 import { HeroSection } from '@/components/hero/HeroSection'
+import { VideoSection } from '@/components/common/VideoSection'
 import { FeaturedCollections } from '@/components/product/FeaturedCollections'
 import BestSellersCarousel from '@/components/product/BestSellersCarousel'
 import { BrandStory } from '@/components/common/BrandStory'
@@ -38,6 +39,7 @@ export default async function HomePage() {
   return (
     <div className="page-section">
       <HeroSection />
+      <VideoSection />
       <FeaturedCollections products={serializedProducts} />
       <BestSellersCarousel products={serializedProducts} />
       <BrandStory />
