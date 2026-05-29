@@ -3,7 +3,7 @@
 import { motion } from 'framer-motion'
 
 const VIDEO_URL =
-  'https://res.cloudinary.com/dlv5tvzsa/image/upload/v1780042721/carljones.jpg_eyhyl3.jpg'
+  'https://res.cloudinary.com/dlv5tvzsa/video/upload/v1780059898/Golden_finish_wksp6o.mp4'
 
 export function VideoSection() {
   return (

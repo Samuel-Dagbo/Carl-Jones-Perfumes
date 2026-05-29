@@ -127,7 +127,7 @@ export function HeroSection() {
       </div>
 
       {/* ── DESKTOP: two-column layout ── */}
-      <div className="hidden lg:flex min-h-[calc(100vh-6rem)]">
+      <div className="hidden lg:flex h-[calc(100vh-10rem)] max-h-[700px]">
         {/* Left content column */}
         <motion.div
           style={{ y: contentY, opacity: contentOpacity }}
