@@ -16,34 +16,25 @@ export function HeroSection() {
     offset: ['start start', 'end start'],
   })
 
-  const imgY = useTransform(scrollYProgress, [0, 1], [0, 40])
-  const contentY = useTransform(scrollYProgress, [0, 1], [0, 50])
-  const contentOpacity = useTransform(scrollYProgress, [0, 0.6], [1, 0])
+  const imgScale = useTransform(scrollYProgress, [0, 1], [1, 1.1])
+  const contentOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0])
 
   return (
     <section
       ref={ref}
-      className="relative min-h-[500px] overflow-hidden bg-white"
+      className="relative bg-[#1a1210]"
     >
-      {/* ── MOBILE: image with text overlay ── */}
-      <div className="lg:hidden relative w-full h-[calc(100vh-4.5rem)] min-h-[550px]">
-        {/* Full background image */}
-        <div className="absolute inset-0">
-          <Image
-            src={HERO_IMAGE}
-            alt="Carl Jones Signature Perfume"
-            fill
-            className="object-cover object-center"
-            priority
-          />
-        </div>
-
-        {/* Subtle overlay for text readability — light enough to still see the image */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/10 to-black/40" />
-
-        {/* Content overlaid on image */}
+      {/* ── MOBILE: full-screen background image with text overlay ── */}
+      <div className="lg:hidden relative w-full h-[calc(100vh-4.5rem)] min-h-[550px] overflow-hidden">
+        <Image
+          src={HERO_IMAGE}
+          alt="Carl Jones Signature Perfume"
+          fill
+          className="object-cover object-center"
+          priority
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/15 to-black/50" />
         <div className="relative z-10 h-full flex flex-col justify-end px-6 sm:px-10 pb-14">
-          {/* Brand label */}
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
@@ -55,8 +46,6 @@ export function HeroSection() {
               Carl Jones Parfums
             </span>
           </motion.div>
-
-          {/* Headline */}
           <div className="mb-3">
             <motion.h1
               initial={{ opacity: 0, y: 24 }}
@@ -79,16 +68,12 @@ export function HeroSection() {
               </span>
             </motion.h1>
           </div>
-
-          {/* Gold divider */}
           <motion.div
             initial={{ scaleX: 0 }}
             animate={{ scaleX: 1 }}
             transition={{ duration: 1, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
             className="w-10 h-[1.5px] bg-gradient-to-r from-[#C9A84C] to-transparent origin-left mb-4"
           />
-
-          {/* Description */}
           <motion.p
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
@@ -100,8 +85,6 @@ export function HeroSection() {
             Each scent is a symphony — crafted for those who
             appreciate the finest things.
           </motion.p>
-
-          {/* CTAs */}
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
@@ -126,14 +109,29 @@ export function HeroSection() {
         </div>
       </div>
 
-      {/* ── DESKTOP: two-column layout ── */}
-      <div className="hidden lg:flex h-[calc(100vh-8rem)]">
-        {/* Left content column */}
+      {/* ── DESKTOP: full-screen background image with refined text overlay ── */}
+      <div className="hidden lg:relative lg:block w-full h-[calc(100vh-8rem)] min-h-[600px] max-h-[900px] overflow-hidden">
+        {/* Parallax background image */}
+        <motion.div style={{ scale: imgScale }} className="absolute inset-0">
+          <Image
+            src={HERO_IMAGE}
+            alt="Carl Jones Signature Perfume"
+            fill
+            className="object-cover object-center"
+            priority
+          />
+        </motion.div>
+
+        {/* Layered overlay for depth and text contrast */}
+        <div className="absolute inset-0 bg-gradient-to-r from-black/65 via-black/30 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/10" />
+
+        {/* Content */}
         <motion.div
-          style={{ y: contentY, opacity: contentOpacity }}
-          className="relative z-10 w-[50%] flex items-center bg-white"
+          style={{ opacity: contentOpacity }}
+          className="relative z-10 h-full flex items-center px-16 xl:px-24 2xl:px-32"
         >
-          <div className="px-16 xl:px-20 2xl:px-28 max-w-xl">
+          <div className="max-w-xl">
             {/* Brand label */}
             <motion.div
               initial={{ opacity: 0, x: -20 }}
@@ -141,7 +139,7 @@ export function HeroSection() {
               transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
               className="flex items-center gap-4 mb-10"
             >
-              <div className="w-12 h-[1px] bg-gradient-to-r from-[#C9A84C] to-transparent" />
+              <div className="w-14 h-[1px] bg-gradient-to-r from-[#C9A84C] to-transparent" />
               <span className="text-[#C9A84C] text-[0.6rem] tracking-[0.35em] uppercase font-medium">
                 Carl Jones Parfums
               </span>
@@ -153,7 +151,8 @@ export function HeroSection() {
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 1, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-                className="font-serif text-[#1a1210] text-[clamp(2.8rem,4.5vw,5rem)] leading-[0.95] tracking-[-0.02em] mb-1"
+                className="font-serif text-white text-[clamp(3rem,5vw,5.5rem)] leading-[0.9] tracking-[-0.03em] mb-2"
+                style={{ textShadow: '0 4px 40px rgba(0,0,0,0.3), 0 2px 12px rgba(0,0,0,0.5)' }}
               >
                 Define Your
               </motion.h1>
@@ -161,7 +160,8 @@ export function HeroSection() {
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 1, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
-                className="font-serif text-[clamp(2.8rem,4.5vw,5rem)] leading-[0.95] tracking-[-0.02em]"
+                className="font-serif text-[clamp(3rem,5vw,5.5rem)] leading-[0.9] tracking-[-0.03em]"
+                style={{ textShadow: '0 4px 40px rgba(0,0,0,0.3), 0 2px 12px rgba(0,0,0,0.5)' }}
               >
                 <span className="bg-gradient-to-r from-[#C9A84C] via-[#E8D5A3] to-[#C9A84C] bg-clip-text text-transparent">
                   Signature
@@ -182,7 +182,8 @@ export function HeroSection() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.7, ease: [0.16, 1, 0.3, 1] }}
-              className="text-[#4a3f35]/70 text-sm lg:text-base max-w-md leading-relaxed mb-12"
+              className="text-white/85 text-sm lg:text-base max-w-lg leading-relaxed mb-12"
+              style={{ textShadow: '0 2px 12px rgba(0,0,0,0.4)' }}
             >
               Rare botanicals meet avant-garde chemistry.
               Each scent is a symphony — crafted for those who
@@ -194,11 +195,11 @@ export function HeroSection() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.9, ease: [0.16, 1, 0.3, 1] }}
-              className="flex flex-col sm:flex-row gap-4"
+              className="flex flex-row gap-4"
             >
               <Link
                 href="/shop"
-                className="group relative inline-flex items-center justify-center gap-2.5 h-12 px-8 bg-gradient-to-r from-[#C9A84C] to-[#D4BC6A] text-[#0A0A0A] font-semibold text-sm tracking-wide rounded-full overflow-hidden transition-all duration-500 hover:shadow-[0_0_30px_rgba(201,168,76,0.3)] hover:scale-[1.02] active:scale-[0.98]"
+                className="group relative inline-flex items-center justify-center gap-2.5 h-12 px-8 bg-gradient-to-r from-[#C9A84C] to-[#D4BC6A] text-[#0A0A0A] font-semibold text-sm tracking-wide rounded-full overflow-hidden transition-all duration-500 hover:shadow-[0_0_30px_rgba(201,168,76,0.35)] hover:scale-[1.02] active:scale-[0.98]"
               >
                 <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/25 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out" />
                 <span className="relative z-10">Explore Collection</span>
@@ -206,7 +207,7 @@ export function HeroSection() {
               </Link>
               <Link
                 href="/about"
-                className="inline-flex items-center justify-center h-12 px-8 border border-[#1a1210]/12 text-[#1a1210]/70 text-sm tracking-wide rounded-full transition-all duration-500 hover:border-[#1a1210]/25 hover:text-[#1a1210] hover:bg-[#1a1210]/[0.03] active:scale-[0.98]"
+                className="inline-flex items-center justify-center h-12 px-8 border border-white/25 text-white/90 text-sm tracking-wide rounded-full backdrop-blur-sm transition-all duration-500 hover:border-white/50 hover:text-white hover:bg-white/10 active:scale-[0.98]"
               >
                 Our Story
               </Link>
@@ -214,35 +215,22 @@ export function HeroSection() {
           </div>
         </motion.div>
 
-        {/* Right image column — elegantly framed */}
-        <div className="relative w-[50%] flex items-center justify-center bg-gradient-to-br from-[#fafafa] to-[#f0ece6] overflow-hidden">
-          {/* Subtle decorative rings */}
-          <div className="absolute top-[10%] right-[-5%] w-[300px] h-[300px] rounded-full border border-[#C9A84C]/[0.06]" />
-          <div className="absolute bottom-[10%] left-[-8%] w-[350px] h-[350px] rounded-full border border-[#C9A84C]/[0.04]" />
-
+        {/* Bottom scroll cue */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 2.5, duration: 1 }}
+          className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10"
+        >
           <motion.div
-            style={{ y: imgY }}
-            className="relative z-10 w-full h-full flex items-center justify-center p-10 lg:p-14"
+            animate={{ y: [0, 6, 0] }}
+            transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
+            className="flex flex-col items-center gap-2"
           >
-            {/* Image frame with shadow and gold ring */}
-            <div className="relative w-full h-full max-w-sm">
-              {/* Outer glow */}
-              <div className="absolute -inset-4 bg-[#C9A84C]/[0.04] rounded-3xl blur-2xl" />
-              {/* Gold ring */}
-              <div className="absolute -inset-px rounded-[1.75rem] bg-gradient-to-br from-[#C9A84C]/20 via-[#C9A84C]/5 to-[#C9A84C]/15" />
-              {/* Image container */}
-              <div className="relative h-full rounded-[1.7rem] overflow-hidden bg-white shadow-[0_20px_60px_rgba(0,0,0,0.08)]">
-                <Image
-                  src={HERO_IMAGE}
-                  alt="Carl Jones Signature Perfume"
-                  fill
-                  className="object-contain object-center p-4"
-                  priority
-                />
-              </div>
-            </div>
+            <span className="text-[6px] text-white/35 tracking-[0.6em] uppercase">Scroll</span>
+            <div className="w-px h-5 bg-gradient-to-b from-[#C9A84C]/40 to-transparent" />
           </motion.div>
-        </div>
+        </motion.div>
       </div>
     </section>
   )
