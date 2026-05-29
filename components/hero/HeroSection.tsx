@@ -127,16 +127,13 @@ export function HeroSection() {
       </div>
 
       {/* ── DESKTOP: two-column layout ── */}
-      <div className="hidden lg:flex h-[calc(100vh-10rem)] max-h-[700px]">
+      <div className="hidden lg:flex h-[calc(100vh-8rem)]">
         {/* Left content column */}
         <motion.div
           style={{ y: contentY, opacity: contentOpacity }}
-          className="relative z-10 w-[55%] flex items-center bg-white"
+          className="relative z-10 w-[50%] flex items-center bg-white"
         >
-          {/* Thin gold accent on right edge */}
-          <div className="absolute right-0 top-[12%] bottom-[12%] w-px bg-gradient-to-b from-transparent via-[#C9A84C]/20 to-transparent" />
-
-          <div className="px-16 xl:px-24 2xl:px-32 max-w-2xl">
+          <div className="px-16 xl:px-20 2xl:px-28 max-w-xl">
             {/* Brand label */}
             <motion.div
               initial={{ opacity: 0, x: -20 }}
@@ -217,28 +214,22 @@ export function HeroSection() {
           </div>
         </motion.div>
 
-        {/* Right image column */}
-        <div className="relative w-[45%] flex items-center justify-center bg-[#fafafa] overflow-hidden">
-          {/* Subtle decorative elements */}
-          <div className="absolute -top-24 -right-24 w-72 h-72 rounded-full border border-[#C9A84C]/[0.07]" />
-          <div className="absolute -bottom-36 -left-36 w-96 h-96 rounded-full border border-[#C9A84C]/[0.05]" />
-
+        {/* Right image column — full bleed, no rounded corners */}
+        <div className="relative w-[50%] overflow-hidden">
           <motion.div
             style={{ y: imgY }}
-            className="relative z-10 w-full h-full flex items-center justify-center p-8"
+            className="absolute inset-0"
           >
-            {/* Image frame */}
-            <div className="relative w-full max-w-md aspect-[3/4] rounded-2xl overflow-hidden shadow-[0_25px_60px_rgba(0,0,0,0.1)]">
-              <div className="absolute inset-0 rounded-2xl ring-1 ring-black/[0.06]" />
-              <Image
-                src={HERO_IMAGE}
-                alt="Carl Jones Signature Perfume"
-                fill
-                className="object-cover"
-                priority
-              />
-            </div>
+            <Image
+              src={HERO_IMAGE}
+              alt="Carl Jones Signature Perfume"
+              fill
+              className="object-cover object-center"
+              priority
+            />
           </motion.div>
+          {/* Subtle left edge gradient for smooth transition */}
+          <div className="absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-white to-transparent z-10" />
         </div>
       </div>
     </section>
