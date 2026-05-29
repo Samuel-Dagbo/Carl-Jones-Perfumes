@@ -109,120 +109,101 @@ export function HeroSection() {
         </div>
       </div>
 
-      {/* ── DESKTOP: gallery-style hero with full image on dark background ── */}
-      <div className="hidden lg:relative lg:grid lg:grid-cols-2 w-full min-h-[calc(100vh-8rem)] overflow-hidden bg-[#1a1210]">
-        {/* Left panel: content */}
-        <motion.div
-          style={{ opacity: contentOpacity }}
-          className="relative z-10 flex items-center px-12 xl:px-20 2xl:px-24 py-24"
-        >
-          <div className="max-w-lg">
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-              className="flex items-center gap-4 mb-10"
-            >
-              <div className="w-14 h-[1px] bg-gradient-to-r from-[#C9A84C] to-transparent" />
-              <span className="text-[#C9A84C] text-[0.6rem] tracking-[0.35em] uppercase font-medium">
-                Carl Jones Parfums
-              </span>
-            </motion.div>
-
-            <div className="mb-6">
-              <motion.h1
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 1, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-                className="font-serif text-white text-[clamp(2.8rem,4.5vw,5rem)] leading-[0.9] tracking-[-0.03em] mb-2"
+      {/* ── DESKTOP: clean editorial white hero with full-height image ── */}
+      <div className="hidden lg:relative lg:block bg-kartel-white-50">
+        <div className="relative mx-auto max-w-[1440px] min-h-[calc(100vh-8rem)] flex items-stretch">
+          {/* Left: text content on clean white */}
+          <motion.div
+            style={{ opacity: contentOpacity }}
+            className="relative z-10 w-[45%] flex items-center px-12 xl:px-16 py-24"
+          >
+            <div className="max-w-md">
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                className="flex items-center gap-4 mb-10"
               >
-                Define Your
-              </motion.h1>
-              <motion.h1
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 1, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
-                className="font-serif text-[clamp(2.8rem,4.5vw,5rem)] leading-[0.9] tracking-[-0.03em]"
-              >
-                <span className="bg-gradient-to-r from-[#C9A84C] via-[#E8D5A3] to-[#C9A84C] bg-clip-text text-transparent">
-                  Signature
+                <div className="w-14 h-[1px] bg-gradient-to-r from-[#C9A84C] to-transparent" />
+                <span className="text-[#C9A84C] text-[0.6rem] tracking-[0.35em] uppercase font-medium">
+                  Carl Jones Parfums
                 </span>
-              </motion.h1>
+              </motion.div>
+
+              <div className="mb-6">
+                <motion.h1
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 1, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+                  className="font-serif text-[#1a1210] text-[clamp(2.8rem,4.5vw,5rem)] leading-[0.9] tracking-[-0.03em] mb-2"
+                >
+                  Define Your
+                </motion.h1>
+                <motion.h1
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 1, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
+                  className="font-serif text-[clamp(2.8rem,4.5vw,5rem)] leading-[0.9] tracking-[-0.03em]"
+                >
+                  <span className="bg-gradient-to-r from-[#C9A84C] via-[#E8D5A3] to-[#C9A84C] bg-clip-text text-transparent">
+                    Signature
+                  </span>
+                </motion.h1>
+              </div>
+
+              <motion.div
+                initial={{ scaleX: 0 }}
+                animate={{ scaleX: 1 }}
+                transition={{ duration: 1.2, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                className="w-16 h-[1.5px] bg-gradient-to-r from-[#C9A84C] via-[#C9A84C]/50 to-transparent origin-left mb-8"
+              />
+
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.7, ease: [0.16, 1, 0.3, 1] }}
+                className="text-[#4a3f35]/60 text-sm lg:text-base max-w-sm leading-relaxed mb-12"
+              >
+                Rare botanicals meet avant-garde chemistry.
+                Each scent is a symphony — crafted for those who
+                appreciate the finest things.
+              </motion.p>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.9, ease: [0.16, 1, 0.3, 1] }}
+                className="flex flex-row gap-4"
+              >
+                <Link
+                  href="/shop"
+                  className="group relative inline-flex items-center justify-center gap-2.5 h-12 px-8 bg-gradient-to-r from-[#C9A84C] to-[#D4BC6A] text-[#0A0A0A] font-semibold text-sm tracking-wide rounded-full overflow-hidden transition-all duration-500 hover:shadow-[0_0_25px_rgba(201,168,76,0.3)] hover:scale-[1.02] active:scale-[0.98]"
+                >
+                  <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/25 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out" />
+                  <span className="relative z-10">Explore Collection</span>
+                  <ArrowRight className="relative z-10 w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-1" strokeWidth={2.5} />
+                </Link>
+                <Link
+                  href="/about"
+                  className="inline-flex items-center justify-center h-12 px-8 border border-[#1a1210]/15 text-[#1a1210]/70 text-sm tracking-wide rounded-full transition-all duration-500 hover:border-[#1a1210]/30 hover:text-[#1a1210] hover:bg-[#1a1210]/5 active:scale-[0.98]"
+                >
+                  Our Story
+                </Link>
+              </motion.div>
             </div>
+          </motion.div>
 
-            <motion.div
-              initial={{ scaleX: 0 }}
-              animate={{ scaleX: 1 }}
-              transition={{ duration: 1.2, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
-              className="w-16 h-[1.5px] bg-gradient-to-r from-[#C9A84C] via-[#C9A84C]/50 to-transparent origin-left mb-8"
-            />
-
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.7, ease: [0.16, 1, 0.3, 1] }}
-              className="text-white/70 text-sm lg:text-base max-w-md leading-relaxed mb-12"
-            >
-              Rare botanicals meet avant-garde chemistry.
-              Each scent is a symphony — crafted for those who
-              appreciate the finest things.
-            </motion.p>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.9, ease: [0.16, 1, 0.3, 1] }}
-              className="flex flex-row gap-4"
-            >
-              <Link
-                href="/shop"
-                className="group relative inline-flex items-center justify-center gap-2.5 h-12 px-8 bg-gradient-to-r from-[#C9A84C] to-[#D4BC6A] text-[#0A0A0A] font-semibold text-sm tracking-wide rounded-full overflow-hidden transition-all duration-500 hover:shadow-[0_0_30px_rgba(201,168,76,0.35)] hover:scale-[1.02] active:scale-[0.98]"
-              >
-                <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/25 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out" />
-                <span className="relative z-10">Explore Collection</span>
-                <ArrowRight className="relative z-10 w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-1" strokeWidth={2.5} />
-              </Link>
-              <Link
-                href="/about"
-                className="inline-flex items-center justify-center h-12 px-8 border border-white/15 text-white/80 text-sm tracking-wide rounded-full backdrop-blur-sm transition-all duration-500 hover:border-white/40 hover:text-white hover:bg-white/10 active:scale-[0.98]"
-              >
-                Our Story
-              </Link>
-            </motion.div>
-          </div>
-        </motion.div>
-
-        {/* Right panel: full-height image */}
-        <div className="relative overflow-hidden flex items-center justify-center bg-[#1a1210]">
-          <motion.div style={{ scale: imgScale }} className="w-full h-full">
+          {/* Right: full-height uncropped image */}
+          <motion.div style={{ scale: imgScale }} className="w-[55%] relative overflow-hidden">
             <Image
               src={HERO_IMAGE}
               alt="Carl Jones Signature Perfume"
               fill
-              className="object-contain object-center"
+              className="object-contain object-[right_center]"
               priority
             />
           </motion.div>
-          {/* Subtle vignette on the image side */}
-          <div className="absolute inset-0 bg-gradient-to-l from-black/20 via-transparent to-transparent pointer-events-none" />
         </div>
-
-        {/* Bottom scroll cue */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 2.5, duration: 1 }}
-          className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10"
-        >
-          <motion.div
-            animate={{ y: [0, 6, 0] }}
-            transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
-            className="flex flex-col items-center gap-2"
-          >
-            <span className="text-[6px] text-white/35 tracking-[0.6em] uppercase">Scroll</span>
-            <div className="w-px h-5 bg-gradient-to-b from-[#C9A84C]/40 to-transparent" />
-          </motion.div>
-        </motion.div>
       </div>
     </section>
   )
