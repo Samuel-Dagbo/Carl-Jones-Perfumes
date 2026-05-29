@@ -203,7 +203,7 @@ export function HeroSection() {
                 src={HERO_IMAGE}
                 alt="Carl Jones Signature Perfume"
                 fill
-                className="object-contain object-center"
+                className="object-cover object-[center_30%]"
                 priority
               />
             </motion.div>
