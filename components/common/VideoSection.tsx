@@ -46,7 +46,7 @@ export function VideoSection() {
               playsInline
               preload="auto"
               crossOrigin="anonymous"
-              className="w-full aspect-video object-cover max-h-[65vh]"
+              className="w-full aspect-video object-cover max-h-[55vh]"
               poster="https://res.cloudinary.com/dlv5tvzsa/image/upload/v1780042721/carljones.jpg_eyhyl3.jpg"
             />
           </div>
