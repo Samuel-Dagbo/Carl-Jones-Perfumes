@@ -109,13 +109,13 @@ export function HeroSection() {
         </div>
       </div>
 
-      {/* ── DESKTOP: clean editorial white hero with full-height image ── */}
+      {/* ── DESKTOP: editorial white hero with rounded image card ── */}
       <div className="hidden lg:relative lg:block bg-kartel-white-50">
-        <div className="relative mx-auto max-w-[1440px] min-h-[calc(100vh-8rem)] flex items-stretch">
-          {/* Left: text content on clean white */}
+        <div className="relative mx-auto max-w-[1440px] min-h-[calc(100vh-8rem)] flex items-center">
+          {/* Left: text content */}
           <motion.div
             style={{ opacity: contentOpacity }}
-            className="relative z-10 w-[45%] flex items-center px-12 xl:px-16 py-24"
+            className="relative z-10 w-[50%] flex-shrink-0 px-12 xl:px-16"
           >
             <div className="max-w-md">
               <motion.div
@@ -193,16 +193,21 @@ export function HeroSection() {
             </div>
           </motion.div>
 
-          {/* Right: full-height uncropped image */}
-          <motion.div style={{ scale: imgScale }} className="w-[55%] relative overflow-hidden">
-            <Image
-              src={HERO_IMAGE}
-              alt="Carl Jones Signature Perfume"
-              fill
-              className="object-contain object-[right_center]"
-              priority
-            />
-          </motion.div>
+          {/* Right: image in a rounded card, shorter and shifted left */}
+          <div className="flex-1 h-full flex items-center justify-center pl-8 xl:pl-12 pr-0">
+            <motion.div
+              style={{ scale: imgScale }}
+              className="relative w-full h-[85%] max-h-[700px] rounded-2xl overflow-hidden bg-[#1a1210] shadow-[0_4px_40px_rgba(0,0,0,0.08)]"
+            >
+              <Image
+                src={HERO_IMAGE}
+                alt="Carl Jones Signature Perfume"
+                fill
+                className="object-contain object-center"
+                priority
+              />
+            </motion.div>
+          </div>
         </div>
       </div>
     </section>
