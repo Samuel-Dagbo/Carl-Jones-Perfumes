@@ -111,7 +111,7 @@ export function HeroSection() {
 
       {/* ── DESKTOP: editorial white hero with rounded image card ── */}
       <div className="hidden lg:relative lg:block bg-kartel-white-50">
-        <div className="relative mx-auto max-w-[1440px] min-h-[calc(100vh-8rem)] flex items-center">
+        <div className="relative mx-auto max-w-[1440px] h-[calc(100vh-8rem)] flex items-center">
           {/* Left: text content */}
           <motion.div
             style={{ opacity: contentOpacity }}
