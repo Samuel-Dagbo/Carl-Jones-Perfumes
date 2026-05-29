@@ -214,22 +214,34 @@ export function HeroSection() {
           </div>
         </motion.div>
 
-        {/* Right image column — full bleed, no rounded corners */}
-        <div className="relative w-[50%] overflow-hidden">
+        {/* Right image column — elegantly framed */}
+        <div className="relative w-[50%] flex items-center justify-center bg-gradient-to-br from-[#fafafa] to-[#f0ece6] overflow-hidden">
+          {/* Subtle decorative rings */}
+          <div className="absolute top-[10%] right-[-5%] w-[300px] h-[300px] rounded-full border border-[#C9A84C]/[0.06]" />
+          <div className="absolute bottom-[10%] left-[-8%] w-[350px] h-[350px] rounded-full border border-[#C9A84C]/[0.04]" />
+
           <motion.div
             style={{ y: imgY }}
-            className="absolute inset-0"
+            className="relative z-10 w-full h-full flex items-center justify-center p-10 lg:p-14"
           >
-            <Image
-              src={HERO_IMAGE}
-              alt="Carl Jones Signature Perfume"
-              fill
-              className="object-contain object-center"
-              priority
-            />
+            {/* Image frame with shadow and gold ring */}
+            <div className="relative w-full h-full max-w-sm">
+              {/* Outer glow */}
+              <div className="absolute -inset-4 bg-[#C9A84C]/[0.04] rounded-3xl blur-2xl" />
+              {/* Gold ring */}
+              <div className="absolute -inset-px rounded-[1.75rem] bg-gradient-to-br from-[#C9A84C]/20 via-[#C9A84C]/5 to-[#C9A84C]/15" />
+              {/* Image container */}
+              <div className="relative h-full rounded-[1.7rem] overflow-hidden bg-white shadow-[0_20px_60px_rgba(0,0,0,0.08)]">
+                <Image
+                  src={HERO_IMAGE}
+                  alt="Carl Jones Signature Perfume"
+                  fill
+                  className="object-contain object-center p-4"
+                  priority
+                />
+              </div>
+            </div>
           </motion.div>
-          {/* Subtle left edge gradient for smooth transition */}
-          <div className="absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-white to-transparent z-10" />
         </div>
       </div>
     </section>
