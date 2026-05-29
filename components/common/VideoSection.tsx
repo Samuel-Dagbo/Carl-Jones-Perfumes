@@ -3,9 +3,6 @@
 import { motion } from 'framer-motion'
 
 const VIDEO_URL =
-  'https://res.cloudinary.com/dlv5tvzsa/video/upload/f_auto:video,q_auto/v1780059898/Golden_finish_wksp6o.mp4'
-
-const VIDEO_SRC_FALLBACK =
   'https://res.cloudinary.com/dlv5tvzsa/video/upload/v1780059898/Golden_finish_wksp6o.mp4'
 
 export function VideoSection() {
@@ -42,6 +39,7 @@ export function VideoSection() {
           {/* Video container */}
           <div className="relative rounded-2xl md:rounded-3xl overflow-hidden shadow-[0_20px_80px_rgba(0,0,0,0.1)] bg-[#1a1210]">
             <video
+              src={VIDEO_URL}
               autoPlay
               muted
               loop
@@ -50,10 +48,7 @@ export function VideoSection() {
               crossOrigin="anonymous"
               className="w-full aspect-video object-cover"
               poster="https://res.cloudinary.com/dlv5tvzsa/image/upload/v1780042721/carljones.jpg_eyhyl3.jpg"
-            >
-              <source src={VIDEO_URL} type="video/mp4" />
-              <source src={VIDEO_SRC_FALLBACK} type="video/mp4" />
-            </video>
+            />
           </div>
         </motion.div>
       </div>
